@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+@import url("https://fonts.cdnfonts.com/css/forte");
+
+@import "tailwindcss";
+
+@layer components {
+  .wrapper {
+    @apply w-[95%] mx-auto;
+  }
+}
+
+@theme {
+  --color-theme-clr: #432918;
+  --font-lato: "Lato", sans-serif;
+  --font-playfair: "forte", serif;
+}
+
+@layer utilities {
+  .text-black {
+    color: #432918 !important;
+  }
+  .text-gray-700 {
+    color: #432918 !important;
+  }
+}
+
+@layer base {
+  input {
+    @apply outline-none;
+  }
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+.loader::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-bottom-color: var(--color-theme-clr);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hide scrollbar but allow scrolling */
+/* Hide scrollbar but allow scroll */
+
+/* Hide scrollbar but allow scrolling */
+.scroll-hide::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-hide::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-hide::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.scroll-hide {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}

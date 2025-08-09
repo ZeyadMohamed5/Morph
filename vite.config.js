@@ -8,5 +8,5 @@ export default defineConfig({
   server: {
     host: true,
   },
-  base: "/Morph/",
+  base: "/",
 });

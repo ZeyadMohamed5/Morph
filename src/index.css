@@ -11,8 +11,8 @@
 
 @font-face {
   font-family: "Forte";
-  src: url("./fonts/ForteMT.woff2") format("woff2"),
-    url("./fonts/ForteMT.woff") format("woff");
+  src: url("./fonts/Forte.woff2") format("woff2"),
+    url("./fonts/Forte.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;

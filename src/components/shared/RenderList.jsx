@@ -6,9 +6,16 @@ const RenderList = ({
   ItemComponent,
   limit = 4,
   categoryFilter,
+  tagFilter,
+  loading: externalLoading = false,
 }) => {
   const [fetchedData, setFetchedData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Determine if we need to fetch data from API
+  const shouldFetchFromAPI = useMemo(() => {
+    return categoryFilter || tagFilter;
+  }, [categoryFilter, tagFilter]);
 
   useEffect(() => {
     let isMounted = true;
@@ -17,17 +24,21 @@ const RenderList = ({
       setLoading(true);
 
       try {
-        if (categoryFilter) {
-          const result = await getProducts({
-            categorySlug: categoryFilter,
+        if (shouldFetchFromAPI) {
+          // Fetch from API with appropriate filters
+          const params = {
             limit,
-          });
+            ...(categoryFilter && { categorySlug: categoryFilter }),
+            ...(tagFilter && { tag: tagFilter }),
+          };
+
+          const result = await getProducts(params);
 
           if (isMounted) {
             setFetchedData(result.products || []);
           }
         } else {
-          // Only process static data if it exists
+          // Process static data if it exists
           if (data && data.length > 0) {
             // Simulate loading from static data
             await new Promise((r) => setTimeout(r, 300));
@@ -38,21 +49,23 @@ const RenderList = ({
             // No data available
             if (isMounted) {
               setFetchedData([]);
-              setLoading(false);
-              return;
             }
           }
         }
       } catch (error) {
         console.error("Failed to fetch products", error);
-        if (isMounted) setFetchedData([]);
+        if (isMounted) {
+          setFetchedData([]);
+        }
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     }
 
-    // Only fetch if we have categoryFilter OR if data has items
-    if (categoryFilter || (data && data.length > 0)) {
+    // Fetch if we need API data OR if we have static data
+    if (shouldFetchFromAPI || (data && data.length > 0)) {
       fetchProducts();
     } else {
       setLoading(false);
@@ -62,16 +75,20 @@ const RenderList = ({
     return () => {
       isMounted = false;
     };
-  }, [categoryFilter, limit]);
+  }, [categoryFilter, tagFilter, limit, shouldFetchFromAPI]);
 
-  // Update fetchedData when data changes (for non-categoryFilter cases)
+  // Update fetchedData when static data changes (for non-API cases)
   useEffect(() => {
-    if (!categoryFilter && data && data.length > 0) {
+    if (!shouldFetchFromAPI && data && data.length > 0) {
       setFetchedData(data.slice(0, limit));
+      setLoading(false);
     }
-  }, [data, limit, categoryFilter]);
+  }, [data, limit, shouldFetchFromAPI]);
 
-  const renderItems = loading
+  // Use external loading state if provided, otherwise use internal loading
+  const isLoading = externalLoading || loading;
+
+  const renderItems = isLoading
     ? Array.from({ length: limit }).map((_, index) => (
         <ItemComponent key={`loading-${index}`} loading={true} />
       ))

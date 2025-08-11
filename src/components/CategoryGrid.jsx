@@ -18,7 +18,7 @@ const CategoryGrid = ({ categories }) => {
             src={
               category.imageUrl && category.imageUrl.trim().length > 5
                 ? category.imageUrl
-                : "./assets/-55.png"
+                : "./assets/-55.jpg"
             }
             alt={category.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"

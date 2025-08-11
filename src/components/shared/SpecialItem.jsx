@@ -27,8 +27,19 @@ const SpecialItem = ({ product, loading }) => {
     );
   }
 
+  const hasDiscount = product.discount && product.discount.percentage > 0;
+  const discountedPrice = hasDiscount ? product.discount.discountedPrice : null;
+  const originalPrice = parseFloat(product.price);
+
   return (
-    <div className="bg-white shadow-md overflow-hidden flex w-full sm:max-w-sm md:max-w-md hover:shadow-lg hover:scale-105 transition duration-300">
+    <div className="bg-white shadow-md overflow-hidden flex w-full sm:max-w-sm md:max-w-md hover:shadow-lg hover:scale-105 transition duration-300 relative">
+      {/* Discount Badge */}
+      {hasDiscount && (
+        <div className="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md shadow-md">
+          -{product.discount.percentage}%
+        </div>
+      )}
+
       <img
         src={product.imageUrl}
         alt={product.name}
@@ -39,13 +50,34 @@ const SpecialItem = ({ product, loading }) => {
           <h4 className="font-light capitalize text-gray-800 mb-1 font-playfair text-xl sm:text-2xl">
             {product.name}
           </h4>
-          <p className="text-gray-600 text-sm mb-3 font-lato">
-            {product.price} EGP
-          </p>
+
+          {/* Price Section with Discount Styling */}
+          <div className="text-sm mb-3 font-lato">
+            {hasDiscount ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Discounted Price */}
+                <span className="text-red-600 font-semibold text-base">
+                  {Math.round(discountedPrice)} EGP
+                </span>
+                {/* Original Price - Crossed Out */}
+                <span className="text-gray-400 line-through text-sm">
+                  {originalPrice} EGP
+                </span>
+                {/* Savings Amount */}
+                <span className="text-green-600 text-xs font-medium">
+                  Save {Math.round(originalPrice - discountedPrice)} EGP
+                </span>
+              </div>
+            ) : (
+              <p className="text-gray-600">{originalPrice} EGP</p>
+            )}
+          </div>
         </div>
         <Link
           to={`/products/${product.slug}`}
-          className="inline-block font-lato text-gray-500 underline text-sm text-center"
+          className={
+            "inline-block font-lato underline text-sm text-center transition-colors text-gray-500 hover:text-gray-700"
+          }
         >
           Shop Now
         </Link>

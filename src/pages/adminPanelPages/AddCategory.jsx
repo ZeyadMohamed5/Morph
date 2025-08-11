@@ -42,9 +42,12 @@ const AddCategory = () => {
       formData.append("type", type);
 
       formData.append("description", description);
+
+      // Only append image if one is selected
       if (type === "category" && imageUrl) {
         formData.append("image", imageUrl);
       }
+
       if (type === "category") {
         const tagNamesFromIds = tags
           .filter((tag) => selectedTagIds.includes(tag.id))
@@ -151,7 +154,7 @@ const AddCategory = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {type === "category" ? "Category" : "Tag"} Name
+                  {type === "category" ? "Category" : "Tag"} Name *
                 </label>
                 <input
                   type="text"
@@ -165,7 +168,7 @@ const AddCategory = () => {
               {type === "category" && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category Image
+                    Category Image (Optional)
                   </label>
                   <input
                     type="file"
@@ -173,6 +176,9 @@ const AddCategory = () => {
                     onChange={(e) => setImageUrl(e.target.files[0])}
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    You can create a category without an image
+                  </p>
                 </div>
               )}
             </div>

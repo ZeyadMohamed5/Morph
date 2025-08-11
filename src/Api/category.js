@@ -7,54 +7,117 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// ✅ Get active categories
+// Add response interceptor for better error handling
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("API Error:", error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+// ✅ Get active categories (public)
 export const getCategories = async () => {
-  const { data } = await axiosInstance.get("/api/products/categories", {
-    params: { active: true },
-  });
-  return data;
+  try {
+    const { data } = await axiosInstance.get("/api/products/categories", {
+      params: { active: true },
+    });
+    return data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
 };
+
+// ✅ Get all categories (admin) - Fixed route
 export const getCategoriesByAdmin = async () => {
-  const { data } = await axiosInstance.get("/api/admin/category");
-  return data;
+  try {
+    const { data } = await axiosInstance.get("/api/products/categories"); // Removed admin path, using products route
+    return data;
+  } catch (error) {
+    console.error("Error fetching admin categories:", error);
+    throw error;
+  }
 };
 
+// ✅ Get all tags (admin)
 export const getTagsByAdmin = async () => {
-  const { data } = await axiosInstance.get("/api/admin/tags", {});
-  return data;
-};
-export const getTags = async () => {
-  const { data } = await axiosInstance.get("/api/products/tags", {
-    params: { active: true },
-  });
-  return data;
+  try {
+    const { data } = await axiosInstance.get("/api/products/tags");
+    return data;
+  } catch (error) {
+    console.error("Error fetching admin tags:", error);
+    throw error;
+  }
 };
 
-// ✅ Add a new category or tag (using FormData)
+// ✅ Get active tags (public)
+export const getTags = async () => {
+  try {
+    const { data } = await axiosInstance.get("/api/products/tags", {
+      params: { active: true },
+    });
+    return data;
+  } catch (error) {
+    console.error("Error fetching tags:", error);
+    throw error;
+  }
+};
+
+// ✅ Add a new category (using FormData)
 export const addCategoryOrTag = async (formData) => {
-  const { data } = await axiosInstance.post(
-    "/api/admin/addCategory",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
-  return data;
+  try {
+    const { data } = await axiosInstance.post(
+      "/api/admin/addCategory",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error adding category/tag:", error);
+    throw error;
+  }
+};
+
+// ✅ Update a category or tag
+export const updateCategoryOrTag = async (id, updateData, type) => {
+  try {
+    const { data } = await axiosInstance.put(`/api/admin/category/${id}`, {
+      ...updateData,
+      type, // Include type in the request body
+    });
+    return data;
+  } catch (error) {
+    console.error("Error updating category/tag:", error);
+    throw error;
+  }
 };
 
 // ✅ Delete a category or tag (by type and id)
 export const deleteCategoryOrTag = async (id, type) => {
-  const { data } = await axiosInstance.delete(`/api/admin/${type}/${id}`);
-  return data;
+  try {
+    const { data } = await axiosInstance.delete(`/api/admin/${type}/${id}`);
+    return data;
+  } catch (error) {
+    console.error("Error deleting category/tag:", error);
+    throw error;
+  }
 };
 
 // ✅ Toggle category or tag active status
 export const toggleCategoryOrTagStatus = async (id, currentStatus, type) => {
-  const { data } = await axiosInstance.put(`/api/admin/${type}/${id}`, {
-    isActive: !currentStatus,
-    type,
-  });
-  return data;
+  try {
+    const { data } = await axiosInstance.put(`/api/admin/category/${id}`, {
+      isActive: !currentStatus,
+      type,
+    });
+    return data;
+  } catch (error) {
+    console.error("Error toggling category/tag status:", error);
+    throw error;
+  }
 };

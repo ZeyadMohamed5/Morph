@@ -186,7 +186,6 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
       }
     });
 
-    console.log("Submitting form data:");
     // Log form data entries for debugging
     for (let [key, value] of submissionForm.entries()) {
       console.log(key, value);
@@ -203,6 +202,15 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
     }
   };
 
+  const handleTagsUpdate = (tagsOrUpdater) => {
+    setFormData((prev) => ({
+      ...prev,
+      tags:
+        typeof tagsOrUpdater === "function"
+          ? tagsOrUpdater(prev.tags)
+          : tagsOrUpdater,
+    }));
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
@@ -339,9 +347,7 @@ const EditProductModal = ({ product, onClose, onUpdate }) => {
             <label className="block text-sm font-medium mb-1">Tags</label>
             <TagSearch
               selectedTags={formData.tags}
-              setSelectedTags={(tags) => {
-                setFormData((prev) => ({ ...prev, tags }));
-              }}
+              setSelectedTags={handleTagsUpdate}
             />
           </div>
 

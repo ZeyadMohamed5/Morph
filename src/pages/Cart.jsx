@@ -48,31 +48,17 @@ const Cart = () => {
 
   useEffect(() => {
     const fetchDetails = async () => {
-      console.log("📦 Cart contents:", cart);
-
       if (cart.length === 0) {
-        console.log("🛒 Cart is empty");
         setCartItems([]);
         setLoading(false);
         return;
       }
 
       try {
-        console.log("🔄 Fetching product details for cart items...");
-
         const items = await Promise.all(
           cart.map(async (item, index) => {
-            console.log(
-              `📋 Fetching product ${index + 1}/${cart.length}:`,
-              item
-            );
-
             try {
               const product = await getProductById(item.id);
-              console.log(
-                `✅ Successfully fetched product ${item.id}:`,
-                product
-              );
 
               return {
                 ...product,
@@ -93,7 +79,6 @@ const Cart = () => {
 
         // Filter out null items (failed fetches)
         const validItems = items.filter((item) => item !== null);
-        console.log("✅ Successfully fetched cart items:", validItems);
 
         setCartItems(validItems);
 
@@ -114,7 +99,6 @@ const Cart = () => {
   }, [cart]);
 
   const handleDelete = (id, variantId, size) => {
-    console.log("🗑️ Deleting item:", { id, variantId, size });
 
     dispatch({
       type: "REMOVE_FROM_CART",
@@ -124,11 +108,9 @@ const Cart = () => {
 
   const handleQuantityChange = (id, newQuantity, variantId, size) => {
     if (newQuantity < 1) {
-      console.log("⚠️ Invalid quantity:", newQuantity);
       return;
     }
 
-    console.log("🔢 Updating quantity:", { id, newQuantity, variantId, size });
 
     dispatch({
       type: "UPDATE_QUANTITY",
@@ -152,13 +134,7 @@ const Cart = () => {
       : discountedSubtotal;
     const code = couponInfo?.code || null;
 
-    console.log("🛒 Proceeding to checkout with:", {
-      items: cartItems,
-      couponCode: code,
-      discountAmount,
-      totalAfterDiscount,
-    });
-
+   
     navigate("/checkout", {
       state: {
         items: cartItems,

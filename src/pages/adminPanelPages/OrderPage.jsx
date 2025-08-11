@@ -11,6 +11,7 @@ const OrderPage = () => {
   const fetchOrderDetails = async () => {
     try {
       const data = await getOrderById(orderId);
+      console.log("Order Details:", data);
       setOrderDetails(data);
       setLoading(false);
     } catch (err) {
@@ -42,6 +43,7 @@ const OrderPage = () => {
     anotherAddress,
     status,
     createdAt,
+    paymentMethod,
     items,
     coupon,
     totalPrice,
@@ -161,8 +163,21 @@ const OrderPage = () => {
           <p>{status}</p>
         </div>
         <div className="flex justify-between text-gray-700">
+          <p className="font-semibold">Payment Method:</p>
+          <p>{paymentMethod}</p>
+        </div>
+        <div className="flex justify-between text-gray-700">
           <p className="font-semibold">Created At:</p>
-          <p>{new Date(createdAt).toLocaleDateString()}</p>
+          <p>
+            {" "}
+            {new Date(createdAt).toLocaleString("en-GB", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
         </div>
       </div>
     </div>

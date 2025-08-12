@@ -1,5 +1,6 @@
 import RenderList from "../components/shared/RenderList";
 import ProductCard from "../components/shared/ProductCard";
+import featuredSectionsData from "../data/featuredSections.json";
 import { useMemo } from "react";
 import { IoIosArrowRoundForward, IoIosRocket } from "react-icons/io";
 import { FaPhoneAlt, FaThumbsUp } from "react-icons/fa";
@@ -10,45 +11,8 @@ import SpecialItem from "../components/shared/SpecialItem";
 import { useCategories, useSpecialProducts } from "../hooks/useProducts";
 
 const Home = () => {
-  // Define all featured sections including new arrivals
-  const featuredSections = useMemo(
-    () => [
-      // {
-      //   type: "tag", // Special type for tag-based sections
-      //   slug: "new",
-      //   tag: "new",
-      //   heading: "New Arrivals",
-      //   limit: 4,
-      //   linkPath: "/shop?tag=new",
-      //   linkLabel: "View all new arrivals",
-      // },
-      {
-        type: "category", // Category-based sections
-        slug: "new-arrivals",
-        heading: "The best dress for the best woman",
-        limit: 4,
-        linkPath: "/shop?category=new-arrivals",
-        linkLabel: "View all new arrivals products",
-      },
-      {
-        type: "category", // Category-based sections
-        slug: "women",
-        heading: "The best dress for the best woman",
-        limit: 4,
-        linkPath: "/shop?category=women",
-        linkLabel: "View all women's products",
-      },
-      {
-        type: "category",
-        slug: "summer-vibes",
-        heading: "Bring the heat with Summer Vibes",
-        limit: 4,
-        linkPath: "/shop?category=summer-vibes",
-        linkLabel: "View all summer vibes products",
-      },
-    ],
-    []
-  );
+  
+  const featuredSections = useMemo(() => featuredSectionsData, []);
 
   // Fetch data using custom hooks
   const {

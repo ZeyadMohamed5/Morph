@@ -1,0 +1,26 @@
+[
+  {
+    "type": "category",
+    "slug": "new",
+    "heading": "The best dress for the best woman",
+    "limit": 4,
+    "linkPath": "/shop?category=new-arrivals",
+    "linkLabel": "View all new arrivals products"
+  },
+  {
+    "type": "category",
+    "slug": "women",
+    "heading": "The best dress for the best woman",
+    "limit": 4,
+    "linkPath": "/shop?category=women",
+    "linkLabel": "View all women's products"
+  },
+  {
+    "type": "category",
+    "slug": "summer-vibes",
+    "heading": "Bring the heat with Summer Vibes",
+    "limit": 4,
+    "linkPath": "/shop?category=summer-vibes",
+    "linkLabel": "View all summer vibes products"
+  }
+]

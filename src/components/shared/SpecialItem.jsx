@@ -45,7 +45,7 @@ const SpecialItem = ({ product, loading }) => {
         alt={product.name}
         className="w-32 h-32 sm:w-40 sm:h-40 object-cover"
       />
-      <div className="p-4 flex flex-col justify-between items-start flex-1">
+      <div className="p-4 flex flex-col justify-between items-start flex-1 w-40">
         <div>
           <h4 className="font-light capitalize text-gray-800 mb-1 font-playfair text-xl sm:text-2xl">
             {product.name}

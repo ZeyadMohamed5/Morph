@@ -27,7 +27,6 @@ const Home = () => {
     error: specialError,
   } = useSpecialProducts("special", 2);
 
-  // Extract data with fallbacks
   const categories = useMemo(
     () => categoriesData?.categories || [],
     [categoriesData]

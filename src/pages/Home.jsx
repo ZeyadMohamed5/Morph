@@ -7,12 +7,9 @@ import { BsFillCreditCardFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import CategoryGrid from "../components/CategoryGrid";
 import SpecialItem from "../components/shared/SpecialItem";
-import { Helmet } from "react-helmet";
 import { useCategories, useSpecialProducts } from "../hooks/useProducts";
 
 const Home = () => {
-  const DOMAIN_URL = import.meta.env.VITE_DOMAIN_URL || window.location.origin;
-
   // Define all featured sections including new arrivals
   const featuredSections = useMemo(
     () => [
@@ -141,47 +138,6 @@ const Home = () => {
 
   return (
     <main>
-      <Helmet>
-        <title>Morph - Discover the Art of Dressing Up</title>
-        <meta
-          name="description"
-          content="Discover the latest trends in fashion with Morph. Made in Indonesia, dedicated to Indonesia. Shop our new arrivals and featured collections."
-        />
-        <link rel="canonical" href={DOMAIN_URL} />
-
-        {/* Open Graph */}
-        <meta
-          property="og:title"
-          content="Morph - Discover the Art of Dressing Up"
-        />
-        <meta
-          property="og:description"
-          content="Discover the latest trends in fashion with Morph. Made in Indonesia, dedicated to Indonesia."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={DOMAIN_URL} />
-        <meta property="og:image" content={`${DOMAIN_URL}/assets/-1011.jpg`} />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Morph - Discover the Art of Dressing Up"
-        />
-        <meta
-          name="twitter:description"
-          content="Discover the latest trends in fashion with Morph. Made in Indonesia, dedicated to Indonesia."
-        />
-        <meta name="twitter:image" content={`${DOMAIN_URL}/assets/-1011.jpg`} />
-
-        {/* Additional SEO */}
-        <meta
-          name="keywords"
-          content="fashion, clothing, dress, women, summer, new arrivals, online shopping , handmade"
-        />
-        <meta name="author" content="Morph" />
-      </Helmet>
-
       {/* Hero Banner */}
       <section
         className="relative w-full min-h-[100dvh] bg-cover bg-center flex flex-col lg:flex-row items-center justify-between gap-8 px-6 pt-35 lg:pt-0"
@@ -205,8 +161,8 @@ const Home = () => {
           </Link>
         </div>
 
-        <div className="relative z-10 lg:w-auto self-center lg:self-end mb-6 lg:mb-4">
-          <div className="flex flex-col gap-3">
+        <div className="relative z-10  lg:w-auto self-center lg:self-end mb-6 lg:mb-4">
+          <div className="flex flex-col gap-3 ">
             {specialLoading ? (
               Array(2)
                 .fill(0)

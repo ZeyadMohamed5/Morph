@@ -4,19 +4,19 @@ import { Link } from "react-router-dom";
 const SpecialItem = ({ product, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white shadow-md overflow-hidden flex w-full sm:max-w-sm md:max-w-md ">
+      <div className="bg-white shadow-md overflow-hidden flex ">
         {/* Image skeleton */}
         <Skeleton
           width={160}
           height={160}
-          className="flex-shrink-0"
+          className=" flex flex-1 justify-center items-center"
           style={{ borderRadius: 0 }}
         />
         {/* Content skeleton */}
         <div className="p-4 flex flex-col justify-between items-start flex-1">
           <div>
             {/* Title skeleton */}
-            <Skeleton width={180} height={25} className="mb-2" />
+            <Skeleton width={150} height={25} className="mb-2" />
             {/* Price skeleton */}
             <Skeleton width={100} height={20} />
           </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { getCategories } from "../Api/category";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Aside = ({
   onCategorySelect,
@@ -13,7 +13,6 @@ const Aside = ({
 }) => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   // Slider UI range constants
   const SLIDER_UI_MIN = 0;
@@ -80,7 +79,6 @@ const Aside = ({
         <li>
           <button
             onClick={() => {
-              navigate("/shop", { replace: true });
               onCategorySelect(null);
               setCategoryName(null);
               setMinPrice(null);
@@ -103,7 +101,6 @@ const Aside = ({
                 // Navigate with completely fresh URL - no search params
                 navigate(`/shop?category=${cat.slug}`, { replace: true });
                 onCategorySelect(cat.slug);
-                setCategoryName(cat.name);
                 setMinPrice(null);
                 setMaxPrice(null);
               }}
@@ -179,11 +176,11 @@ const Aside = ({
         <div className="mt-6">
           <button
             onClick={() => {
-              navigate("/shop");
               onCategorySelect(null);
               setCategoryName(null);
               setMinPrice(null);
               setMaxPrice(null);
+              setPage(1);
             }}
             className="w-full px-4 py-2 text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 rounded"
           >

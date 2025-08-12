@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  Outlet,
+} from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import Home from "../pages/Home";
 import UserLogin from "../pages/UserLogin";
@@ -18,17 +24,28 @@ import AddDiscounts from "../pages/adminPanelPages/AddDiscounts";
 import NotFound from "../pages/NotFound";
 import CheckOut from "../pages/CheckOut";
 
+function AnimatedOutlet() {
+  const location = useLocation();
+  return (
+    <div key={location.pathname} className="page fade">
+      <Outlet />
+    </div>
+  );
+}
+
 const AppRoutes = () => {
   return (
     <Router>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/products/:slug" element={<ProductPage />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/checkout" element={<CheckOut />} />
-          <Route path="*" element={<NotFound />} />
+          <Route element={<AnimatedOutlet />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/products/:slug" element={<ProductPage />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/checkout" element={<CheckOut />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
 
         <Route path="/login" element={<UserLogin />} />

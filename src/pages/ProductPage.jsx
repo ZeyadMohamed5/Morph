@@ -5,7 +5,7 @@ import Spinner from "../components/shared/Spinner";
 import useCart from "../hooks/useCart";
 import { IoCart } from "react-icons/io5";
 import NotFound from "./NotFound";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const HEADER_HEIGHT = 100;
 

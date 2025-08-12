@@ -4,7 +4,7 @@ import Aside from "../components/Aside";
 import ProductCard from "../components/shared/ProductCard";
 import RenderList from "../components/shared/RenderList";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useCategories, useProducts } from "../hooks/useProducts";
 
 const HEADER_HEIGHT = 100;

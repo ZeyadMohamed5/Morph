@@ -9,9 +9,9 @@ import { Link } from "react-router-dom";
 import CategoryGrid from "../components/CategoryGrid";
 import SpecialItem from "../components/shared/SpecialItem";
 import { useCategories, useSpecialProducts } from "../hooks/useProducts";
+import { Helmet } from "react-helmet-async";
 
 const Home = () => {
-  
   const featuredSections = useMemo(() => featuredSectionsData, []);
 
   // Fetch data using custom hooks
@@ -102,23 +102,34 @@ const Home = () => {
 
   return (
     <main>
+      <Helmet>
+        <title>Morph - Discover the Art of Dressing Up</title>
+        <meta
+          name="description"
+          content="Morph brings you luxury women’s fashion that’s as versatile as you are. From day to night, style our timeless pieces your way — effortless, elegant, and endlessly wearable. Shop our new arrivals and featured collections."
+        />
+        <link rel="canonical" href="https://morpheg.store" />
+      </Helmet>
       {/* Hero Banner */}
       <section
         className="relative w-full min-h-[100dvh] bg-cover bg-center flex flex-col lg:flex-row items-center justify-between gap-8 px-6 pt-35 lg:pt-0"
-        style={{ backgroundImage: 'url("./assets/-1011.jpg")' }}
+        style={{
+          backgroundImage: 'url("./assets/-1011.jpg")',
+          backgroundAttachment: "fixed",
+        }}
         role="banner"
       >
-        {/* Overlay for better text readability */}
+        <div className="bg-gray-300/20 absolute inset-0 "></div>
         <div className="relative z-10 flex flex-col lg:items-start items-center">
           <p className="text-white text-shadow-md pb-3 font-playfair lg:text-left text-center text-xl sm:text-2xl max-w-2xl leading-tight uppercase">
-            made in Indonesia, dedicated to Indonesia
+            Less effort, More impression
           </p>
           <h1 className="text-white text-shadow-lg pb-6 font-playfair text-4xl text-center md:text-left sm:text-6xl lg:text-7xl max-w-2xl leading-tight uppercase">
             Discover the Art of Dressing Up
           </h1>
           <Link
             to="/shop"
-            className="font-playfair uppercase bg-theme-clr text-white py-3 px-5 sm:py-4 sm:px-6 text-lg sm:text-xl lg:text-2xl inline-block text-center shadow-2xl hover:scale-105 duration-300 focus:outline-none focus:ring-2 focus:ring-theme-clr focus:ring-offset-2"
+            className="font-playfair uppercase bg-theme-clr text-shadow-md text-white py-3 px-5 sm:py-4 sm:px-6 text-lg sm:text-xl lg:text-2xl inline-block text-center shadow-2xl hover:scale-105 duration-300 focus:outline-none focus:ring-2 focus:ring-theme-clr focus:ring-offset-2"
             aria-label="Browse all products in our shop"
           >
             Shop Now!!

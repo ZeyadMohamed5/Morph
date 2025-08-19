@@ -2,25 +2,25 @@
   {
     "type": "category",
     "slug": "new",
-    "heading": "The best dress for the best woman",
+    "heading": "New Arrivals",
     "limit": 4,
-    "linkPath": "/shop?category=new-arrivals",
-    "linkLabel": "View all new arrivals products"
+    "linkPath": "/shop?category=new",
+    "linkLabel": "View all easy wear products"
   },
   {
     "type": "category",
-    "slug": "women",
-    "heading": "The best dress for the best woman",
+    "slug": "easy-wear",
+    "heading": "Effortless Everyday Style",
     "limit": 4,
-    "linkPath": "/shop?category=women",
-    "linkLabel": "View all women's products"
+    "linkPath": "/shop?category=easy-wear",
+    "linkLabel": "View all easy wear products"
   },
   {
     "type": "category",
-    "slug": "summer-vibes",
-    "heading": "Bring the heat with Summer Vibes",
+    "slug": "statement-layers",
+    "heading": "Handmade Layers That Speak",
     "limit": 4,
-    "linkPath": "/shop?category=summer-vibes",
-    "linkLabel": "View all summer vibes products"
+    "linkPath": "/shop?category=statement-layers",
+    "linkLabel": "View all statement layers products"
   }
 ]

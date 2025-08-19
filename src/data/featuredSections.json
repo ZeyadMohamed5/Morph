@@ -1,10 +1,10 @@
 [
   {
     "type": "category",
-    "slug": "new",
+    "slug": "new-arrivals",
     "heading": "New Arrivals",
     "limit": 4,
-    "linkPath": "/shop?category=new",
+    "linkPath": "/shop?category=new-arrivals",
     "linkLabel": "View all easy wear products"
   },
   {

@@ -4,23 +4,18 @@ import { Link } from "react-router-dom";
 const SpecialItem = ({ product, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white shadow-md overflow-hidden flex ">
+      <div className="bg-white shadow-md overflow-hidden flex">
         {/* Image skeleton */}
         <Skeleton
           width={160}
-          height={160}
-          className=" flex flex-1 justify-center items-center"
+          height={"100%"}
+          className="flex flex-shrink-0"
           style={{ borderRadius: 0 }}
         />
         {/* Content skeleton */}
         <div className="p-4 flex flex-col justify-between items-start flex-1">
-          <div>
-            {/* Title skeleton */}
-            <Skeleton width={150} height={25} className="mb-2" />
-            {/* Price skeleton */}
-            <Skeleton width={100} height={20} />
-          </div>
-          {/* Link skeleton */}
+          <Skeleton width={150} height={25} className="mb-2" />
+          <Skeleton width={100} height={20} />
           <Skeleton width={80} height={20} style={{ marginTop: "1rem" }} />
         </div>
       </div>
@@ -40,14 +35,19 @@ const SpecialItem = ({ product, loading }) => {
         </div>
       )}
 
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="w-32 h-32 sm:w-40 sm:h-40 object-cover"
-      />
-      <div className="p-4 flex flex-col justify-between items-start flex-1 w-40">
+      {/* Image container */}
+      <div className="w-40 sm:w-48 h-full flex-shrink-0">
+        <img
+          src={product.imageUrl}
+          alt={product.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="p-4 flex flex-col justify-between items-start flex-1">
         <div>
-          <h4 className="font-light capitalize text-gray-800 mb-1 font-playfair text-xl sm:text-2xl">
+          <h4 className="font-light capitalize text-gray-800 mb-2 font-playfair text-xl sm:text-2xl">
             {product.name}
           </h4>
 
@@ -55,29 +55,35 @@ const SpecialItem = ({ product, loading }) => {
           <div className="text-sm mb-3 font-lato">
             {hasDiscount ? (
               <div className="flex items-center gap-2 flex-wrap">
-                {/* Discounted Price */}
                 <span className="text-red-600 font-semibold text-base">
                   {Math.round(discountedPrice)} EGP
                 </span>
-                {/* Original Price - Crossed Out */}
                 <span className="text-gray-400 line-through text-sm">
                   {originalPrice} EGP
                 </span>
-                {/* Savings Amount */}
                 <span className="text-green-600 text-xs font-medium">
                   Save {Math.round(originalPrice - discountedPrice)} EGP
                 </span>
               </div>
+            ) : product.previousPrice &&
+              parseFloat(product.previousPrice) > parseFloat(product.price) ? (
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-gray-800 font-semibold text-base">
+                  {product.price} EGP
+                </span>
+                <span className="text-gray-400 line-through text-sm">
+                  {product.previousPrice} EGP
+                </span>
+              </div>
             ) : (
-              <p className="text-gray-600">{originalPrice} EGP</p>
+              <p className="text-gray-600">{product.price} EGP</p>
             )}
           </div>
         </div>
+
         <Link
           to={`/products/${product.slug}`}
-          className={
-            "inline-block font-lato underline text-sm text-center transition-colors text-gray-500 hover:text-gray-700"
-          }
+          className="inline-block font-lato underline text-sm text-center transition-colors text-gray-500 hover:text-gray-700"
         >
           Shop Now
         </Link>

@@ -119,17 +119,21 @@ const ProductPage = () => {
             product.images.some((img) => img.url && img.url.trim() !== "") && (
               <div className="flex gap-4 mt-6 overflow-x-auto">
                 {product.images.map((img) => (
-                  <img
+                  <div
                     key={img.id}
-                    src={img.url}
-                    alt={`Product Image ${img.id}`}
-                    className={`w-24 h-24 cursor-pointer border-1 rounded p-1 ${
+                    className={`w-24 h-24 border overflow-hidden cursor-pointer ${
                       selectedImage === img.url
-                        ? "border-theme-clr/50"
-                        : "border-theme-clr/25"
+                        ? "border-theme-clr/70"
+                        : "border-theme-clr/30"
                     }`}
                     onClick={() => setSelectedImage(img.url)}
-                  />
+                  >
+                    <img
+                      src={img.url}
+                      alt={`Product Image ${img.id}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 ))}
               </div>
             )}
@@ -171,19 +175,6 @@ const ProductPage = () => {
           <p className="text-gray-400 mb-2 font-lato pt-4">
             {product.description}
           </p>
-
-          {/* {product.tags?.length > 0 && (
-            <div className="flex gap-2 flex-wrap mb-4">
-              {product.tags.map((tag) => (
-                <span
-                  key={tag.id}
-                  className="bg-theme-clr/15 text-gray-600 text-sm px-3 py-1 rounded-full font-medium shadow-sm"
-                >
-                  {tag.name}
-                </span>
-              ))}
-            </div>
-          )} */}
 
           {product.variants?.length > 0 && (
             <div className="mt-6">

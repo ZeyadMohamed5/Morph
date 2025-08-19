@@ -75,7 +75,12 @@ From day to night, style our timeless pieces your way effortless, elegant, and e
 
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self' https://morph-ecommerce.onrender.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;"
+      content="default-src 'self';
+           connect-src 'self' https://morph-ecommerce.onrender.com;
+           script-src 'self' 'unsafe-inline' 'unsafe-eval';
+           style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+           font-src 'self' https://fonts.gstatic.com;
+           img-src 'self' data: https:;"
     />
 
     <!--  better performance -->
@@ -83,7 +88,7 @@ From day to night, style our timeless pieces your way effortless, elegant, and e
 
     <script type="application/ld+json">
       {
-        "@context": "https://schema.org", 
+        "@context": "https://schema.org",
         "@type": "ClothingStore",
         "name": "Morph",
         "description": "Morph brings you luxury women’s fashion that’s as versatile as you are.

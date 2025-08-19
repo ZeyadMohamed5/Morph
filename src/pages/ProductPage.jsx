@@ -136,7 +136,7 @@ const ProductPage = () => {
         </div>
 
         <div className="col-span-12 md:col-span-6 md:px-10">
-          <h1 className="text-5xl md:text-7xl font-playfair uppercase mb-4">
+          <h1 className="text-5xl md:text-7xl font-playfair uppercase mb-4 text-theme-clr">
             {product.name}
           </h1>
 

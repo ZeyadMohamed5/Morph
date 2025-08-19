@@ -193,7 +193,7 @@ const Shop = () => {
       <section className="wrapper">
         <div style={{ height: HEADER_HEIGHT }} />
         <div className="grid grid-cols-12 gap-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase col-span-12 font-playfair py-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl uppercase col-span-12 font-playfair py-4 text-theme-clr">
             {headingText}
           </h1>
 

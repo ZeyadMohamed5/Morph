@@ -5,7 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 const ProductCard = ({ product, loading = false }) => {
   if (loading) {
     return (
-      <div className="col-span-12 md:col-span-6 lg:col-span-3">
+      <div className="col-span-6 md:col-span-6 lg:col-span-3">
         <div className="flex flex-col h-full relative group">
           <div className="w-full aspect-[4/5] overflow-hidden relative">
             <Skeleton
@@ -28,7 +28,7 @@ const ProductCard = ({ product, loading = false }) => {
   const hasDiscount = discount && discount.discountedPrice;
 
   return (
-    <div className="col-span-12 md:col-span-6 lg:col-span-3">
+    <div className="col-span-6 md:col-span-6 lg:col-span-3">
       <Link to={`/products/${slug}`}>
         <div className="flex flex-col h-full relative group">
           <div className="w-full aspect-[4/5] overflow-hidden relative">

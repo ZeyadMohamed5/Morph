@@ -9,7 +9,7 @@ const SpecialItem = ({ product, loading }) => {
         <Skeleton
           width={160}
           height={"100%"}
-          className="flex flex-shrink-0"
+          className="flex flex-shrink-0 items-center "
           style={{ borderRadius: 0 }}
         />
         {/* Content skeleton */}
@@ -36,7 +36,7 @@ const SpecialItem = ({ product, loading }) => {
       )}
 
       {/* Image container */}
-      <div className="w-40 sm:w-48 h-full flex-shrink-0">
+      <div className="w-40  sm:w-40 h-full flex-shrink-0 aspect-square">
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -45,7 +45,7 @@ const SpecialItem = ({ product, loading }) => {
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col justify-between items-start flex-1">
+      <div className="p-2 md:p-4 flex flex-col justify-between items-start flex-1">
         <div>
           <h4 className="font-light capitalize text-gray-800 mb-2 font-playfair text-xl sm:text-2xl">
             {product.name}

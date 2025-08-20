@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import Aside from "../components/Aside";
 import ProductCard from "../components/shared/ProductCard";
@@ -12,14 +12,14 @@ const LIMIT = 9;
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const isInitialized = useRef(false);
 
   // Initialize state from URL params
   const [categorySlug, setCategorySlug] = useState(
     () => searchParams.get("category") || null
   );
-  const [query, setQuery] = useState(
-    () => searchParams.get("q")?.toLowerCase() || ""
-  );
+  const [search, setSearch] = useState(() => searchParams.get("q") || "");
+
   const [page, setPage] = useState(
     () => parseInt(searchParams.get("page")) || 1
   );
@@ -33,11 +33,22 @@ const Shop = () => {
   // Fetch products with current filters
   const { data, isLoading, error, isPreviousData } = useProducts({
     page,
-    limit: LIMIT,
+    pageSize: LIMIT,
     categorySlug,
     minPrice,
     maxPrice,
-    query,
+    q: search, // Changed from 'search' to 'q' to match useProducts hook
+  });
+
+  // Debug log to see what parameters are being passed
+  console.log("Shop component search parameters:", {
+    page,
+    pageSize: LIMIT,
+    categorySlug,
+    minPrice,
+    maxPrice,
+    q: search,
+    searchFromURL: searchParams.get("q"),
   });
 
   // Fetch categories
@@ -67,10 +78,10 @@ const Shop = () => {
       title = `${categoryName} - Morph`;
       description = `Browse our selection of ${categoryName} products.`;
       canonical = `${DOMAIN_URL}/shop?category=${categorySlug}`;
-    } else if (query) {
-      title = `Search results for "${query}" - Morph`;
-      description = `Search results for "${query}" on Morph.`;
-      canonical = `${DOMAIN_URL}/shop?q=${encodeURIComponent(query)}`;
+    } else if (search) {
+      title = `Search results for "${search}" - Morph`;
+      description = `Search results for "${search}" on Morph.`;
+      canonical = `${DOMAIN_URL}/shop?q=${encodeURIComponent(search)}`;
     }
 
     return {
@@ -78,32 +89,63 @@ const Shop = () => {
       pageDescription: description,
       canonicalUrl: canonical,
     };
-  }, [categoryName, query, categorySlug]);
+  }, [categoryName, search, categorySlug]);
 
-  // Update URL params when state changes
+  // Sync state with URL params when they change externally (like from SearchBox navigation)
   useEffect(() => {
+    const urlCategory = searchParams.get("category");
+    const urlSearch = searchParams.get("q") || "";
+    const urlPage = parseInt(searchParams.get("page")) || 1;
+    const urlMinPrice = searchParams.get("minPrice");
+    const urlMaxPrice = searchParams.get("maxPrice");
+
+    // Only update state if URL params are different from current state
+    if (urlCategory !== categorySlug) {
+      setCategorySlug(urlCategory);
+    }
+    if (urlSearch !== search) {
+      setSearch(urlSearch);
+    }
+    if (urlPage !== page) {
+      setPage(urlPage);
+    }
+    if (urlMinPrice !== minPrice) {
+      setMinPrice(urlMinPrice);
+    }
+    if (urlMaxPrice !== maxPrice) {
+      setMaxPrice(urlMaxPrice);
+    }
+
+    isInitialized.current = true;
+  }, [searchParams]);
+
+  // Update URL params when state changes (but not during initialization)
+  useEffect(() => {
+    if (!isInitialized.current) return;
+
     const newSearchParams = new URLSearchParams();
 
     if (categorySlug) newSearchParams.set("category", categorySlug);
-    if (query) newSearchParams.set("q", query);
+    if (search) newSearchParams.set("q", search);
     if (page > 1) newSearchParams.set("page", page.toString());
     if (minPrice) newSearchParams.set("minPrice", minPrice);
     if (maxPrice) newSearchParams.set("maxPrice", maxPrice);
 
-    setSearchParams(newSearchParams, { replace: true });
-  }, [categorySlug, query, page, minPrice, maxPrice, setSearchParams]);
+    // Only update URL if params actually changed
+    const currentParamsString = searchParams.toString();
+    const newParamsString = newSearchParams.toString();
+
+    if (currentParamsString !== newParamsString) {
+      setSearchParams(newSearchParams, { replace: true });
+    }
+  }, [categorySlug, search, page, minPrice, maxPrice]);
 
   // Event handlers
   const handleCategorySelect = useCallback((slug) => {
     setCategorySlug(slug);
-    setQuery("");
+    setSearch("");
     setPage(1);
-  }, []);
-
-  const handlePriceRangeUpdate = useCallback((min, max) => {
-    setMinPrice(min);
-    setMaxPrice(max);
-    setPage(1);
+    // Don't reset price filters when selecting category
   }, []);
 
   const handlePageChange = useCallback((newPage) => {
@@ -143,10 +185,19 @@ const Shop = () => {
 
   // Main heading text
   const headingText = useMemo(() => {
-    if (query) return `Search results for "${query}"`;
+    if (search) return `Search results for "${search}"`;
     if (categoryName) return categoryName;
     return "All Products";
-  }, [query, categoryName]);
+  }, [search, categoryName]);
+
+  // Clear all filters handler
+  const handleClearAllFilters = useCallback(() => {
+    setCategorySlug(null);
+    setSearch("");
+    setMinPrice(null);
+    setMaxPrice(null);
+    setPage(1);
+  }, []);
 
   if (error) {
     return (
@@ -185,7 +236,7 @@ const Shop = () => {
         <meta name="twitter:description" content={pageDescription} />
 
         {/* Prevent indexing of search results and filtered pages */}
-        {(query || minPrice || maxPrice || page > 1) && (
+        {(search || minPrice || maxPrice || page > 1) && (
           <meta name="robots" content="noindex,follow" />
         )}
       </Helmet>
@@ -203,7 +254,6 @@ const Shop = () => {
               selectedCategorySlug={categorySlug}
               minPrice={minPrice}
               maxPrice={maxPrice}
-              updatePriceRange={handlePriceRangeUpdate}
               setMinPrice={setMinPrice}
               setMaxPrice={setMaxPrice}
             />
@@ -222,15 +272,9 @@ const Shop = () => {
               <div className="flex-grow flex justify-center items-center text-xl text-gray-500">
                 <div className="text-center">
                   <p className="mb-4">No products found.</p>
-                  {(query || categorySlug || minPrice || maxPrice) && (
+                  {(search || categorySlug || minPrice || maxPrice) && (
                     <button
-                      onClick={() => {
-                        setCategorySlug(null);
-                        setQuery("");
-                        setMinPrice(null);
-                        setMaxPrice(null);
-                        setPage(1);
-                      }}
+                      onClick={handleClearAllFilters}
                       className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors"
                     >
                       Clear All Filters

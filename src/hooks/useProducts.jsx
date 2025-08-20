@@ -51,61 +51,64 @@ export const useSpecialProducts = (tag, limit) => {
 
 export const useProducts = ({
   page = 1,
-  limit = 10,
+  pageSize = 10, // Changed from 'limit' to match controller
   categorySlug,
+  categoryId,
   minPrice,
   maxPrice,
-  query,
+  q, // Changed from 'query' to match controller
+  tag,
+  tagId,
+  discount,
 }) => {
   // Clean and normalize parameters
   const normalizedParams = {
-    page: Math.max(1, page), // Ensure page is at least 1
-    limit: Math.max(1, Math.min(100, limit)), // Ensure limit is between 1 and 100
+    page: Math.max(1, page),
+    pageSize: Math.max(1, Math.min(100, pageSize)),
     categorySlug: categorySlug || undefined,
+    categoryId: categoryId ? Number(categoryId) : undefined,
     minPrice: minPrice ? Number(minPrice) : undefined,
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
-    query: query?.trim() || undefined,
+    q: q?.trim() || undefined,
+    tag: tag?.trim() || undefined,
+    tagId: tagId ? Number(tagId) : undefined,
+    discount: discount === true || discount === "true" ? true : undefined,
   };
 
   return useQuery({
     queryKey: productKeys.list(normalizedParams),
-    queryFn: () =>
-      getProducts({
-        page: normalizedParams.page,
-        limit: normalizedParams.limit,
-        categorySlug: normalizedParams.categorySlug,
-        minPrice: normalizedParams.minPrice,
-        maxPrice: normalizedParams.maxPrice,
-        searchQuery: normalizedParams.query,
-      }),
+    queryFn: () => getProducts(normalizedParams),
     select: (data) => {
-      // Transform the data to match expected structure
+      // Minimal processing since controller handles most logic
+      const products = data?.products || [];
+
       return {
-        products: Array.isArray(data) ? data : data?.products || [],
-        pagination: data?.pagination || null,
-        total: data?.total || data?.products?.length || 0,
+        products,
+        totalCount: data.totalCount || 0,
+        totalPages: data.totalPages || 0,
+        currentPage: data.currentPage || 1,
+        // Add useful metadata
+        hasDiscountFilter: normalizedParams.discount === true,
+        discountedProductsCount: products.filter((p) => p.discount).length,
       };
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
-    placeholderData: (previousData) => previousData, // Keep previous data while fetching
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    placeholderData: (previousData) => previousData,
     retry: (failureCount, error) => {
-      // Don't retry on 4xx errors
       if (error?.status >= 400 && error?.status < 500) {
         return false;
       }
       return failureCount < 2;
     },
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
-    // Add network-aware settings
     networkMode: "online",
-    // Refetch on window focus for better UX
     refetchOnWindowFocus: false,
-    // Refetch when coming back online
     refetchOnReconnect: true,
+    refetchOnMount: false,
+    throwOnError: false,
   });
 };
-
 
 export const adminKeys = {
   all: ["admin"],

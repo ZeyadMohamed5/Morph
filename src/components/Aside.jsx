@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { getCategories } from "../Api/category";
-import { useNavigate } from "react-router-dom";
+import { useCategories } from "../hooks/useProducts";
 
 const Aside = ({
   onCategorySelect,
@@ -9,16 +8,12 @@ const Aside = ({
   maxPrice,
   setMinPrice,
   setMaxPrice,
-  setCategoryName,
 }) => {
-  const [categories, setCategories] = useState([]);
-  const navigate = useNavigate();
-
   // Slider UI range constants
   const SLIDER_UI_MIN = 0;
   const SLIDER_UI_MAX = 1000;
   const PRICE_MIN = 0;
-  const PRICE_MAX = 50000;
+  const PRICE_MAX = 10000;
 
   const [localMin, setLocalMin] = useState(SLIDER_UI_MIN);
   const [localMax, setLocalMax] = useState(SLIDER_UI_MAX);
@@ -26,13 +21,9 @@ const Aside = ({
   const tempMin = useRef(localMin);
   const tempMax = useRef(localMax);
 
-  useEffect(() => {
-    async function fetchCategories() {
-      const data = await getCategories();
-      if (data) setCategories(data.categories);
-    }
-    fetchCategories();
-  }, []);
+  // Use the hook to get categories
+  const { data: categoriesData } = useCategories();
+  const categories = categoriesData?.categories || [];
 
   const mapSliderToPrice = (val) =>
     Math.round(
@@ -61,6 +52,10 @@ const Aside = ({
       const sliderVal = mapPriceToSlider(minPrice);
       setLocalMin(sliderVal);
       tempMin.current = sliderVal;
+    } else {
+      // Reset to defaults when minPrice is null
+      setLocalMin(SLIDER_UI_MIN);
+      tempMin.current = SLIDER_UI_MIN;
     }
   }, [minPrice]);
 
@@ -69,55 +64,62 @@ const Aside = ({
       const sliderVal = mapPriceToSlider(maxPrice);
       setLocalMax(sliderVal);
       tempMax.current = sliderVal;
+    } else {
+      // Reset to defaults when maxPrice is null
+      setLocalMax(SLIDER_UI_MAX);
+      tempMax.current = SLIDER_UI_MAX;
     }
   }, [maxPrice]);
 
-  return (
-    <aside className="col-span-2 ">
-      {/* Categories */}
-      <ul className="space-y-2">
-        <li>
-          <button
-            onClick={() => {
-              onCategorySelect(null);
-              setCategoryName(null);
-              setMinPrice(null);
-              setMaxPrice(null);
-            }}
-            className={`w-full text-left px-2 py-1 rounded ${
-              selectedCategorySlug === null
-                ? "bg-gray-200 font-semibold"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            All Categories
-          </button>
-        </li>
+  const handleResetFilters = () => {
+    onCategorySelect(null);
+    setMinPrice(null);
+    setMaxPrice(null);
+    // Reset local slider values
+    setLocalMin(SLIDER_UI_MIN);
+    setLocalMax(SLIDER_UI_MAX);
+    tempMin.current = SLIDER_UI_MIN;
+    tempMax.current = SLIDER_UI_MAX;
+  };
 
-        {categories.map((cat) => (
-          <li key={cat.id}>
+  return (
+    <aside className="col-span-2">
+      {/* Categories */}
+      <div className="mb-6">
+        <h3 className="mb-3 font-semibold text-lg">Categories</h3>
+        <ul className="space-y-2">
+          <li>
             <button
-              onClick={() => {
-                // Navigate with completely fresh URL - no search params
-                navigate(`/shop?category=${cat.slug}`, { replace: true });
-                onCategorySelect(cat.slug);
-                setMinPrice(null);
-                setMaxPrice(null);
-              }}
+              onClick={() => onCategorySelect(null)} // Only change category, don't reset prices
               className={`w-full text-left px-2 py-1 rounded ${
-                selectedCategorySlug === cat.slug
+                selectedCategorySlug === null
                   ? "bg-gray-200 font-semibold"
                   : "hover:bg-gray-100"
               }`}
             >
-              {cat.name}
+              All Categories
             </button>
           </li>
-        ))}
-      </ul>
+
+          {categories.map((cat) => (
+            <li key={cat.id}>
+              <button
+                onClick={() => onCategorySelect(cat.slug)} // Only change category, don't reset prices
+                className={`w-full text-left px-2 py-1 rounded ${
+                  selectedCategorySlug === cat.slug
+                    ? "bg-gray-200 font-semibold"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {cat.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* Price Range */}
-      <div className="mt-8">
+      <div className="mb-6">
         <h3 className="mb-3 font-semibold text-lg">Price Range</h3>
         <div className="relative h-8">
           <div className="absolute top-3 left-0 right-0 h-2 bg-gray-300 rounded-full" />
@@ -172,21 +174,16 @@ const Aside = ({
           <span>${mapSliderToPrice(localMin)}</span>
           <span>${mapSliderToPrice(localMax)}</span>
         </div>
+      </div>
 
-        <div className="mt-6">
-          <button
-            onClick={() => {
-              onCategorySelect(null);
-              setCategoryName(null);
-              setMinPrice(null);
-              setMaxPrice(null);
-              setPage(1);
-            }}
-            className="w-full px-4 py-2 text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 rounded"
-          >
-            Reset Filters
-          </button>
-        </div>
+      {/* Reset Filters Button */}
+      <div className="mt-6">
+        <button
+          onClick={handleResetFilters}
+          className="w-full px-4 py-2 text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 rounded"
+        >
+          Reset Filters
+        </button>
       </div>
     </aside>
   );

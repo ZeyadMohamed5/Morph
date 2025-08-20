@@ -69,21 +69,31 @@ const Header = () => {
         {menuOpen ? <IoClose /> : <IoMenu />}
       </button>
 
-      {/* Mobile Menu */}
+      {/* Backdrop */}
+      {/* Backdrop */}
       <div
-        className={`
-    absolute top-full left-0 w-full bg-white
-    ${isHome ? "text-black" : "text-black"}
-    flex flex-col items-start p-6 space-y-4 shadow-md z-50 md:hidden
-    transform transition-all duration-300 ease-in-out
+        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ease-in-out
     ${
       menuOpen
-        ? "opacity-100 translate-y-0 pointer-events-auto"
-        : "opacity-0 -translate-y-4 pointer-events-none"
+        ? "opacity-100 pointer-events-auto"
+        : "opacity-0 pointer-events-none"
     }
+  `}
+        onClick={() => setMenuOpen(false)}
+      ></div>
+
+      {/* Menu */}
+      <div
+        className={`
+    fixed top-0 right-0 h-full w-3/4 bg-white
+    ${isHome ? "text-black" : "text-black"}
+    flex flex-col items-start p-6 space-y-6 shadow-lg z-50 md:hidden
+    transform transition-transform duration-300 ease-in-out
+    ${menuOpen ? "translate-x-0" : "translate-x-full"}
   `}
       >
         <SearchBox />
+
         <Link
           className="font-bold font-lato"
           to="/"
@@ -91,6 +101,7 @@ const Header = () => {
         >
           Home
         </Link>
+
         <Link
           className="font-bold font-lato"
           to="/shop"
@@ -98,6 +109,7 @@ const Header = () => {
         >
           Shop
         </Link>
+
         <Link
           to="/cart"
           onClick={() => setMenuOpen(false)}

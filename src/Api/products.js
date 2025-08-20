@@ -20,47 +20,59 @@ axiosInstance.interceptors.response.use(
 
 export const getProducts = async ({
   page = 1,
-  limit = 12,
+  pageSize = 12,
   categoryId = null,
   categorySlug = null,
   minPrice = null,
   maxPrice = null,
-  searchQuery = null,
+  q = null, // Changed from 'search' to 'q' to match useProducts
   tag = null,
-  active = true,
+  tagId = null,
+  discount = null,
 } = {}) => {
   try {
     let endpoint = "/api/products";
+
+    // Base parameters
     let params = {
       page,
-      limit,
+      pageSize,
       ...(minPrice !== null && { minPrice }),
       ...(maxPrice !== null && { maxPrice }),
-      ...(searchQuery && { q: searchQuery }),
       ...(tag && { tag }),
-      ...(active !== null && { active }),
+      ...(tagId && { tagId }),
       ...(categoryId && { categoryId }),
+      ...(discount === true && { discount: "true" }),
     };
 
-    if (categorySlug) {
-      // Use collection route
-      endpoint = `/api/products/collections/${categorySlug}`;
-      params = {
-        page,
-        limit,
-        ...(minPrice !== null && { minPrice }),
-        ...(maxPrice !== null && { maxPrice }),
-        ...(active !== null && { active }),
-      };
-    } else if (searchQuery) {
+    // Handle different endpoints
+    if (q) {
+      // If there's a search term, use search endpoint
       endpoint = "/api/products/search";
+      params.q = q; // Pass q parameter to API
+      console.log("Using search endpoint with params:", params);
+    } else if (categorySlug) {
+      // If no search but has category, use collection endpoint
+      endpoint = `/api/products/collections/${categorySlug}`;
+      console.log("Using collection endpoint with params:", params);
+    } else {
+      // Default products endpoint
+      console.log("Using default products endpoint with params:", params);
     }
 
     const { data } = await axiosInstance.get(endpoint, { params });
-    return data;
+
+    return {
+      products: data.products || [],
+      totalCount: data.totalCount || 0,
+      totalPages: data.totalPages || 0,
+      currentPage: data.currentPage || page,
+    };
   } catch (error) {
     console.error("Error fetching products:", error);
-    throw error;
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch products"
+    );
   }
 };
 

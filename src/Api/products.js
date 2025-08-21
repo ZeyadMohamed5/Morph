@@ -21,11 +21,12 @@ axiosInstance.interceptors.response.use(
 export const getProducts = async ({
   page = 1,
   pageSize = 12,
+  limit = null, // Add limit parameter
   categoryId = null,
   categorySlug = null,
   minPrice = null,
   maxPrice = null,
-  q = null, // Changed from 'search' to 'q' to match useProducts
+  q = null,
   tag = null,
   tagId = null,
   discount = null,
@@ -33,10 +34,13 @@ export const getProducts = async ({
   try {
     let endpoint = "/api/products";
 
+    // Use limit if provided, otherwise use pageSize
+    const effectivePageSize = limit || pageSize;
+
     // Base parameters
     let params = {
       page,
-      pageSize,
+      pageSize: effectivePageSize, // Use the effective page size
       ...(minPrice !== null && { minPrice }),
       ...(maxPrice !== null && { maxPrice }),
       ...(tag && { tag }),
@@ -47,17 +51,10 @@ export const getProducts = async ({
 
     // Handle different endpoints
     if (q) {
-      // If there's a search term, use search endpoint
       endpoint = "/api/products/search";
-      params.q = q; // Pass q parameter to API
-      console.log("Using search endpoint with params:", params);
+      params.q = q;
     } else if (categorySlug) {
-      // If no search but has category, use collection endpoint
       endpoint = `/api/products/collections/${categorySlug}`;
-      console.log("Using collection endpoint with params:", params);
-    } else {
-      // Default products endpoint
-      console.log("Using default products endpoint with params:", params);
     }
 
     const { data } = await axiosInstance.get(endpoint, { params });

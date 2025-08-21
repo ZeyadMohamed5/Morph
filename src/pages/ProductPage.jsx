@@ -112,31 +112,54 @@ const ProductPage = () => {
           </div>
         )}
 
-        <div className="col-span-12 md:col-span-6">
+        <div className="col-span-12 md:col-span-6 ">
           <img src={selectedImage} alt={product.name} className="w-full" />
 
-          {product.images &&
-            product.images.some((img) => img.url && img.url.trim() !== "") && (
-              <div className="flex gap-4 mt-6 overflow-x-auto">
-                {product.images.map((img) => (
-                  <div
-                    key={img.id}
-                    className={`w-24 h-24 border overflow-hidden cursor-pointer ${
-                      selectedImage === img.url
-                        ? "border-theme-clr/70"
-                        : "border-theme-clr/30"
-                    }`}
-                    onClick={() => setSelectedImage(img.url)}
-                  >
-                    <img
-                      src={img.url}
-                      alt={`Product Image ${img.id}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+          {(product.imageUrl ||
+            (product.images && product.images.length > 0)) && (
+            <div className="flex gap-4 mt-6 overflow-x-auto">
+              {/* Main image first */}
+              {product.imageUrl && (
+                <div
+                  key="main-image"
+                  className={`w-24 h-24 border overflow-hidden cursor-pointer ${
+                    selectedImage === product.imageUrl
+                      ? "border-theme-clr/70"
+                      : "border-theme-clr/30"
+                  }`}
+                  onClick={() => setSelectedImage(product.imageUrl)}
+                >
+                  <img
+                    src={product.imageUrl}
+                    alt={`${product.name} main`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Other images */}
+              {product.images &&
+                product.images
+                  .filter((img) => img.url && img.url.trim() !== "")
+                  .map((img) => (
+                    <div
+                      key={img.id}
+                      className={`w-24 h-24 border overflow-hidden cursor-pointer ${
+                        selectedImage === img.url
+                          ? "border-theme-clr/70"
+                          : "border-theme-clr/30"
+                      }`}
+                      onClick={() => setSelectedImage(img.url)}
+                    >
+                      <img
+                        src={img.url}
+                        alt={`Product Image ${img.id}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+            </div>
+          )}
         </div>
 
         <div className="col-span-12 md:col-span-6 md:px-10">

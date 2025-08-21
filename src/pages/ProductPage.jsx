@@ -15,7 +15,7 @@ const ProductPage = () => {
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [selectedSizeId, setSelectedSizeId] = useState(null);
 
-  const DOMAIN_URL = import.meta.env.DOMAIN_URL;
+  const DOMAIN_URL = import.meta.env.VITE_DOMAIN_URL;
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,10 +28,21 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setLoading(true);
+        setError("");
         const data = await getProductBySlug(slug);
+
+        if (!data) {
+          setError("Product not found");
+          return;
+        }
 
         setProduct(data);
         setSelectedImage(data?.imageUrl);
+
+        // Reset selections when product changes
+        setSelectedVariantId(null);
+        setSelectedSizeId(null);
       } catch (err) {
         console.error("Fetch error:", err);
         setError("Failed to load product");
@@ -39,10 +50,15 @@ const ProductPage = () => {
         setLoading(false);
       }
     };
-    fetchProduct();
+
+    if (slug) {
+      fetchProduct();
+    }
   }, [slug]);
 
   const handleAddToCart = () => {
+    if (!product || !selectedVariantId || !selectedSizeId) return;
+
     dispatch({
       type: "ADD_TO_CART",
       payload: {
@@ -61,47 +77,110 @@ const ProductPage = () => {
   const increaseQty = () => setQuantity((prev) => prev + 1);
   const decreaseQty = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
-  if (loading)
+  // Loading state
+  if (loading) {
     return (
       <>
         <Helmet>
-          <title>Morph - Loading product...</title>
+          <title>Loading... - Morph</title>
           <meta name="description" content="Loading product details" />
+          <meta name="robots" content="noindex" />
         </Helmet>
         <Spinner />
       </>
     );
+  }
 
-  if (error)
+  // Error state
+  if (error || !product) {
     return (
       <>
         <Helmet>
-          <title>Morph - Product not found</title>
+          <title>Product Not Found - Morph</title>
+          <meta
+            name="description"
+            content="The requested product could not be found"
+          />
           <meta name="robots" content="noindex" />
         </Helmet>
         <NotFound />
       </>
     );
+  }
+
+  // Generate structured data for the product
+  const productStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.imageUrl,
+    url: `${DOMAIN_URL}/products/${slug}`,
+    brand: {
+      "@type": "Brand",
+      name: "Morph",
+    },
+    offers: {
+      "@type": "Offer",
+      price: product.discount?.discountedPrice || product.price,
+      priceCurrency: "EGP",
+      availability: "https://schema.org/InStock",
+      url: `${DOMAIN_URL}/products/${slug}`,
+    },
+  };
+
+  const currentPrice = product.discount?.discountedPrice || product.price;
+  const originalPrice = product.discount
+    ? product.price
+    : product.previousPrice;
 
   return (
     <>
       <Helmet>
         <title>{`${product.name} - Morph`}</title>
-        <meta name="description" content={product.description} />
+        <meta
+          name="description"
+          content={
+            product.description ||
+            `Shop ${product.name} at Morph - luxury women's fashion`
+          }
+        />
         <link rel="canonical" href={`${DOMAIN_URL}/products/${slug}`} />
 
         {/* Open Graph */}
-        <meta property="og:title" content={product.name} />
-        <meta property="og:description" content={product.description} />
+        <meta property="og:title" content={`${product.name} - Morph`} />
+        <meta
+          property="og:description"
+          content={product.description || `Shop ${product.name} at Morph`}
+        />
         <meta property="og:type" content="product" />
         <meta property="og:url" content={`${DOMAIN_URL}/products/${slug}`} />
         <meta property="og:image" content={product.imageUrl} />
+        <meta property="og:site_name" content="Morph" />
+
+        {/* Product specific Open Graph */}
+        <meta property="product:price:amount" content={currentPrice} />
+        <meta property="product:price:currency" content="EGP" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={product.name} />
-        <meta name="twitter:description" content={product.description} />
+        <meta name="twitter:title" content={`${product.name} - Morph`} />
+        <meta
+          name="twitter:description"
+          content={product.description || `Shop ${product.name} at Morph`}
+        />
         <meta name="twitter:image" content={product.imageUrl} />
+
+        {/* Additional SEO */}
+        <meta
+          name="keywords"
+          content={`${product.name}, fashion, women's clothing, Morph, ${slug}`}
+        />
+
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(productStructuredData)}
+        </script>
       </Helmet>
 
       <div className="relative" style={{ height: HEADER_HEIGHT }} />
@@ -112,8 +191,15 @@ const ProductPage = () => {
           </div>
         )}
 
-        <div className="col-span-12 md:col-span-6 ">
-          <img src={selectedImage} alt={product.name} className="w-full" />
+        <div className="col-span-12 md:col-span-6">
+          <img
+            src={selectedImage}
+            alt={product.name}
+            className="w-full"
+            onError={(e) => {
+              e.target.src = "/assets/-1011.jpg"; // Add a fallback image
+            }}
+          />
 
           {(product.imageUrl ||
             (product.images && product.images.length > 0)) && (
@@ -122,7 +208,7 @@ const ProductPage = () => {
               {product.imageUrl && (
                 <div
                   key="main-image"
-                  className={`w-24 h-24 border overflow-hidden cursor-pointer ${
+                  className={`w-24 h-24 border overflow-hidden cursor-pointer flex-shrink-0 ${
                     selectedImage === product.imageUrl
                       ? "border-theme-clr/70"
                       : "border-theme-clr/30"
@@ -144,7 +230,7 @@ const ProductPage = () => {
                   .map((img) => (
                     <div
                       key={img.id}
-                      className={`w-24 h-24 border overflow-hidden cursor-pointer ${
+                      className={`w-24 h-24 border overflow-hidden cursor-pointer flex-shrink-0 ${
                         selectedImage === img.url
                           ? "border-theme-clr/70"
                           : "border-theme-clr/30"
@@ -217,6 +303,7 @@ const ProductPage = () => {
                         : "border-gray-300"
                     }`}
                     style={{ backgroundColor: variant.color }}
+                    aria-label={`Select ${variant.color} color`}
                   />
                 ))}
               </div>
@@ -236,15 +323,16 @@ const ProductPage = () => {
                         size.stock > 0 && setSelectedSizeId(size.size)
                       }
                       disabled={size.stock === 0}
-                      className={`px-4 py-2 border rounded font-lato text-sm cursor-pointer ${
+                      className={`px-4 py-2 border rounded font-lato text-sm cursor-pointer transition-colors ${
                         selectedSizeId === size.size
                           ? "bg-theme-clr text-white"
-                          : "bg-white text-gray-700"
+                          : "bg-white text-gray-700 hover:bg-gray-50"
                       } ${
                         size.stock === 0 ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
                       {size.size}
+                      {size.stock === 0 && " (Out of Stock)"}
                     </button>
                   ))}
               </div>
@@ -259,14 +347,16 @@ const ProductPage = () => {
               <div className="border px-4 py-3 flex items-center justify-between w-full sm:w-auto">
                 <button
                   onClick={decreaseQty}
-                  className="text-2xl font-semibold font-playfair cursor-pointer"
+                  className="text-2xl font-semibold font-playfair cursor-pointer hover:text-theme-clr transition-colors"
+                  aria-label="Decrease quantity"
                 >
                   −
                 </button>
                 <span className="text-xl px-6">{quantity}</span>
                 <button
                   onClick={increaseQty}
-                  className="text-2xl font-playfair font-semibold cursor-pointer"
+                  className="text-2xl font-playfair font-semibold cursor-pointer hover:text-theme-clr transition-colors"
+                  aria-label="Increase quantity"
                 >
                   +
                 </button>
@@ -276,11 +366,11 @@ const ProductPage = () => {
             <button
               onClick={handleAddToCart}
               disabled={!selectedVariantId || !selectedSizeId}
-              className={`w-full sm:w-auto px-6 sm:px-13 py-4 md:self-end uppercase flex items-center justify-center gap-2 text-base sm:text-sm 
+              className={`w-full sm:w-auto px-6 sm:px-13 py-4 md:self-end uppercase flex items-center justify-center gap-2 text-base sm:text-sm transition-all duration-200
     ${
       !selectedVariantId || !selectedSizeId
         ? "bg-gray-400 cursor-not-allowed"
-        : "bg-theme-clr cursor-pointer"
+        : "bg-theme-clr cursor-pointer hover:bg-opacity-90"
     } text-white`}
             >
               Add to Cart

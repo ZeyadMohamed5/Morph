@@ -67,7 +67,11 @@ const Home = () => {
     const headingId = `${section.slug}-heading`;
 
     return (
-      <section key={sectionId} className="wrapper" aria-labelledby={headingId}>
+      <section
+        key={sectionId}
+        className="wrapper mt-10"
+        aria-labelledby={headingId}
+      >
         <h2
           id={headingId}
           className="font-playfair text-theme-clr uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl py-5"

@@ -130,6 +130,7 @@ const ProductPage = () => {
   };
 
   const currentPrice = product.discount?.discountedPrice || product.price;
+
   const originalPrice = product.discount
     ? product.price
     : product.previousPrice;
@@ -137,7 +138,7 @@ const ProductPage = () => {
   return (
     <>
       <Helmet>
-        <title>{`${product.name} - Morph`}</title>
+        <title>{`Morph - ${product.name}`}</title>
         <meta
           name="description"
           content={

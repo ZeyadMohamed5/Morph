@@ -7,7 +7,7 @@ const CategoryGrid = ({ categories }) => {
     "col-start-7 col-span-6 row-start-1 row-span-2",
   ];
   return (
-    <section className="wrapper grid grid-cols-12 grid-rows-2 gap-2 py-10 max-h-[100vh]">
+    <section className="wrapper grid grid-cols-12 grid-rows-2 gap-2 py-6 max-h-[100vh]">
       {categories.slice(0, 3).map((category, index) => (
         <Link
           to={`/shop?category=${category.slug}`}

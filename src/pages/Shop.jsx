@@ -40,17 +40,6 @@ const Shop = () => {
     q: search, // Changed from 'search' to 'q' to match useProducts hook
   });
 
-  // Debug log to see what parameters are being passed
-  console.log("Shop component search parameters:", {
-    page,
-    pageSize: LIMIT,
-    categorySlug,
-    minPrice,
-    maxPrice,
-    q: search,
-    searchFromURL: searchParams.get("q"),
-  });
-
   // Fetch categories
   const { data: categoriesData } = useCategories();
 
@@ -68,14 +57,13 @@ const Shop = () => {
 
   // SEO meta data
   const { pageTitle, pageDescription, canonicalUrl } = useMemo(() => {
-    const DOMAIN_URL =
-      import.meta.env.VITE_DOMAIN_URL || window.location.origin;
-    let title = "Shop - Morph";
+    const DOMAIN_URL = import.meta.env.VITE_DOMAIN_URL;
+    let title = "Morph - Shop";
     let description = "Browse all available products on Morph.";
     let canonical = `${DOMAIN_URL}/shop`;
 
     if (categoryName) {
-      title = `${categoryName} - Morph`;
+      title = `Morph - ${categoryName}`;
       description = `Browse our selection of ${categoryName} products.`;
       canonical = `${DOMAIN_URL}/shop?category=${categorySlug}`;
     } else if (search) {

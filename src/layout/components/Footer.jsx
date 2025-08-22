@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="px-6 pt-10 pb-18 bg-theme-clr">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left text-white">
+    <footer className="px-6 pt-10 pb-6 bg-theme-clr">
+      <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6 text-center md:text-left text-white">
         {/* Logo & tagline */}
-        <div>
+        <div className="col-span-12 md:col-span-3">
           <h3 className="font-semibold font-playfair text-5xl mb-2 uppercase">
             Morph
           </h3>
@@ -13,7 +13,7 @@ const Footer = () => {
         </div>
 
         {/* Quick links */}
-        <div>
+        <div className="col-span-4 md:col-span-3">
           <h3 className="font-semibold text-lg mb-2">Quick Links</h3>
           <ul className="text-sm font-semibold space-y-1">
             <li>
@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
 
         {/* Social links */}
-        <div>
+        <div className="col-span-4 md:col-span-3">
           <h3 className="font-semibold text-lg mb-2">Follow Us</h3>
           <ul className="text-sm font-semibold space-y-1">
             <li>
@@ -70,6 +70,38 @@ const Footer = () => {
             </li>
           </ul>
         </div>
+
+        {/* Policies */}
+        <div className="col-span-4 md:col-span-3">
+          <h3 className="font-semibold text-lg mb-2">Policies</h3>
+          <ul className="text-sm font-semibold space-y-1">
+            <li>
+              <Link className="relative group" to="/terms">
+                Terms & Conditions
+                <span className="absolute left-0 bottom-0 w-0 h-[2px] transition-all duration-500 group-hover:w-full bg-white"></span>
+              </Link>
+            </li>
+            <li>
+              <Link className="relative group" to="/privacy">
+                Privacy Policy
+                <span className="absolute left-0 bottom-0 w-0 h-[2px] transition-all duration-500 group-hover:w-full bg-white"></span>
+              </Link>
+            </li>
+            <li>
+              <Link className="relative group" to="/returns">
+                Return Policy
+                <span className="absolute left-0 bottom-0 w-0 h-[2px] transition-all duration-500 group-hover:w-full bg-white"></span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Divider + Copyright */}
+      <div className="max-w-7xl mx-auto mt-10 border-t border-gray-200 pt-4 text-center">
+        <p className="text-gray-300 text-sm">
+          © 2025 - All rights reserved. Morph
+        </p>
       </div>
     </footer>
   );

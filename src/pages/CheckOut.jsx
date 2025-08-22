@@ -4,6 +4,7 @@ import CartContext from "../context/CartContext";
 import ProductCartComponent from "../components/shared/ProductCartComponent";
 import { getProductById } from "../Api/products";
 import { createOrder } from "../Api/orders";
+import { useCities, useShippingPrice } from "../hooks/useProducts";
 
 const HEADER_HEIGHT = 100;
 
@@ -15,6 +16,11 @@ const CheckOut = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+
+  const [selectedCity, setSelectedCity] = useState("");
+
+  const { data: cities = [] } = useCities();
+  const { data: shippingPrice = 0 } = useShippingPrice(selectedCity);
 
   // Form fields
   const [firstName, setFirstName] = useState("");
@@ -141,7 +147,8 @@ const CheckOut = () => {
       anotherMobile: anotherMobile.trim(),
       anotherAddress: anotherAddress.trim(),
       couponCode,
-      paymentMethod, // ✅ Include payment method
+      paymentMethod,
+      city: selectedCity,
       items: cartItems.map((item) => ({
         productId: item.id,
         variantId: item.variantId,
@@ -167,6 +174,10 @@ const CheckOut = () => {
       setSubmitting(false);
     }
   };
+
+  const grandTotal =
+    (totalAfterDiscount > 0 ? totalAfterDiscount : totalBeforeCoupon) +
+    (selectedCity ? shippingPrice : 0);
 
   return (
     <section className="wrapper min-h-screen">
@@ -234,6 +245,24 @@ const CheckOut = () => {
                     onChange={(e) => setMobile(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-400 outline-none focus:border-theme-clr transition-colors"
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-lato mb-1 text-gray-800">
+                    Select City *
+                  </label>
+                  <select
+                    required
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-400 outline-none focus:border-theme-clr transition-colors"
+                  >
+                    <option value="">-- Choose City --</option>
+                    {cities.map((city, idx) => (
+                      <option key={idx} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
@@ -370,7 +399,7 @@ const CheckOut = () => {
             <div className="flex justify-end pt-4">
               <button
                 type="submit"
-                disabled={submitting || cartItems.length === 0}
+                disabled={submitting || cartItems.length === 0 || !selectedCity}
                 className="px-8 py-3 bg-theme-clr text-white font-lato uppercase tracking-wide hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed text-lg"
               >
                 {submitting ? "Placing Order..." : "Confirm Order"}
@@ -443,8 +472,14 @@ const CheckOut = () => {
 
               {/* Shipping info */}
               <div className="flex justify-between mb-2 text-gray-600">
-                <span className="font-lato text-sm">Shipping</span>
-                <span className="font-lato text-sm">will be calculated</span>
+                <div className="flex justify-between mb-2 text-gray-600">
+                  <span className="font-lato text-sm">Shipping </span>
+                </div>
+                <span className="font-lato text-sm">
+                  {selectedCity
+                    ? ` EGP ${shippingPrice.toFixed(2)}`
+                    : "Select a city"}
+                </span>
               </div>
 
               <div className="flex justify-between border-t border-gray-400 pt-3 mt-3">
@@ -452,10 +487,7 @@ const CheckOut = () => {
                   Total
                 </span>
                 <span className="text-xl font-semibold font-lato text-gray-800">
-                  EGP{" "}
-                  {totalAfterDiscount > 0
-                    ? totalAfterDiscount.toFixed(2)
-                    : totalBeforeCoupon.toFixed(2)}
+                  EGP {grandTotal.toFixed(2)}
                 </span>
               </div>
 

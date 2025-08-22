@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOrderById } from "../../Api/orders";
+import { useShippingPrice } from "../../hooks/useProducts";
 
 const OrderPage = () => {
   const { orderId } = useParams();
@@ -11,14 +12,19 @@ const OrderPage = () => {
   const fetchOrderDetails = async () => {
     try {
       const data = await getOrderById(orderId);
-      console.log("Order Details:", data);
       setOrderDetails(data);
+
       setLoading(false);
     } catch (err) {
       setError("Error fetching order details");
       setLoading(false);
     }
   };
+
+  // fetch shipping price (only runs if city exists)
+  const { data: shippingPrice, isLoading: shippingLoading } = useShippingPrice(
+    orderDetails?.city
+  );
 
   useEffect(() => {
     fetchOrderDetails();
@@ -40,6 +46,7 @@ const OrderPage = () => {
     phone,
     anotherMobile,
     address,
+    city,
     anotherAddress,
     status,
     createdAt,
@@ -70,6 +77,9 @@ const OrderPage = () => {
             <span className="font-semibold text-gray-700">Phone:</span> {phone}
           </p>
           <p>
+            <span className="font-semibold text-gray-700">City:</span> {city}
+          </p>
+          <p>
             <span className="font-semibold text-gray-700">Another Mobile:</span>{" "}
             {anotherMobile || "-"}
           </p>
@@ -77,6 +87,7 @@ const OrderPage = () => {
             <span className="font-semibold text-gray-700">Address:</span>{" "}
             {address}
           </p>
+
           <p>
             <span className="font-semibold text-gray-700">
               Another Address:
@@ -154,6 +165,10 @@ const OrderPage = () => {
           </div>
         )}
 
+        <div className="flex justify-between text-gray-700">
+          <p className="font-semibold">Shipping:</p>
+          <p>${Number(shippingPrice).toFixed(2)}</p>
+        </div>
         <div className="flex justify-between text-gray-700">
           <p className="font-semibold">Total Price:</p>
           <p>${Number(totalPrice).toFixed(2)}</p>

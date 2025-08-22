@@ -7,6 +7,8 @@ import {
 } from "../Api/products";
 import { getCategories as fetchCategories, getTags } from "../Api/category";
 
+import { getAllCities, getShippingPriceByCity } from "../Api/orders";
+
 // Query key factories for better organization
 export const productKeys = {
   all: ["products"],
@@ -221,5 +223,54 @@ export const useTags = () => {
     // Don't refetch on window focus unless data is stale
     refetchOnWindowFocus: false,
     refetchOnReconnect: true,
+  });
+};
+
+export const shippingKeys = {
+  all: ["shipping"],
+  cities: () => [...shippingKeys.all, "cities"],
+  price: (city) => [...shippingKeys.all, "price", city],
+};
+
+// ─── 🚚 Shipping Queries ────────────────────────
+
+// Cities list
+export const useCities = () => {
+  return useQuery({
+    queryKey: shippingKeys.cities(),
+    queryFn: getAllCities,
+    select: (data) => {
+      // Ensure normalized shape
+
+      return Array.isArray(data) ? data : data?.cities || [];
+    },
+    staleTime: Infinity, // Cities won't change often
+    gcTime: Infinity,
+    retry: (failureCount, error) => {
+      if (error?.status >= 400 && error?.status < 500) return false;
+      return failureCount < 2;
+    },
+    networkMode: "offlineFirst",
+    refetchOnWindowFocus: false,
+  });
+};
+
+// Shipping price for a city
+export const useShippingPrice = (city) => {
+  return useQuery({
+    queryKey: shippingKeys.price(city),
+    queryFn: () => getShippingPriceByCity(city),
+    enabled: Boolean(city), // only fetch when city is chosen
+    select: (data) => {
+      // Normalize response
+      return data?.shippingPrice ?? 0;
+    },
+    staleTime: 10 * 60 * 1000, // cache 10 min
+    gcTime: 30 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error?.status >= 400 && error?.status < 500) return false;
+      return failureCount < 2;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 };

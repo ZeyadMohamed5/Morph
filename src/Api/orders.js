@@ -131,3 +131,15 @@ export const createOrder = async (payload) => {
   );
   return data;
 };
+
+// ─── 🚚 Shipping ──────────────────────────────────────────────
+
+export const getAllCities = async () => {
+  const { data } = await axiosInstance.get("/api/shipping/cities");
+  return data;
+};
+
+export const getShippingPriceByCity = async (city) => {
+  const { data } = await axiosInstance.get(`/api/shipping/price/${city}`);
+  return data;
+};

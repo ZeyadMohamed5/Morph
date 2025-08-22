@@ -6,6 +6,7 @@ import RenderList from "../components/shared/RenderList";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { Helmet } from "react-helmet-async";
 import { useCategories, useProducts } from "../hooks/useProducts";
+import Spinner from "../components/shared/Spinner";
 
 const HEADER_HEIGHT = 100;
 const LIMIT = 9;
@@ -249,15 +250,11 @@ const Shop = () => {
 
           <div className="md:col-span-10 col-span-12 min-h-[90vh] flex flex-col">
             {/* Loading state with previous data */}
-            {isLoading && !isPreviousData && (
-              <div className="flex-grow flex justify-center items-center">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-              </div>
-            )}
+            {isLoading && !isPreviousData && <Spinner />}
 
             {/* No products found */}
             {!isLoading && products.length === 0 && (
-              <div className="flex-grow flex justify-center items-center text-xl text-gray-500">
+              <div className="flex-grow flex justify-center items-center text-xl text-gray-500 ">
                 <div className="text-center">
                   <p className="mb-4">No products found.</p>
                   {(search || categorySlug || minPrice || maxPrice) && (

@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 const SpecialItem = ({ product, loading }) => {
   if (loading) {
     return (
-      <div className="bg-white shadow-md overflow-hidden flex">
+      <div className="bg-white shadow-md overflow-hidden flex w-full sm:max-w-sm md:max-w-md">
         {/* Image skeleton */}
         <Skeleton
           width={160}
-          height={"100%"}
-          className="flex flex-shrink-0 items-center "
+          height="100%"
+          className="flex flex-shrink-0 items-center"
           style={{ borderRadius: 0 }}
         />
         {/* Content skeleton */}
@@ -27,7 +27,10 @@ const SpecialItem = ({ product, loading }) => {
   const originalPrice = parseFloat(product.price);
 
   return (
-    <div className="bg-white shadow-md overflow-hidden flex w-full sm:max-w-sm md:max-w-md hover:shadow-lg hover:scale-105 transition duration-300 relative">
+    <Link
+      to={`/products/${product.slug}`}
+      className="bg-white shadow-md overflow-hidden flex w-full sm:max-w-sm md:max-w-md hover:shadow-lg hover:scale-105 transition duration-300 relative"
+    >
       {/* Discount Badge */}
       {hasDiscount && (
         <div className="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-md shadow-md">
@@ -36,7 +39,7 @@ const SpecialItem = ({ product, loading }) => {
       )}
 
       {/* Image container */}
-      <div className="w-40  sm:w-40 h-full flex-shrink-0 aspect-square">
+      <div className="w-40 sm:w-40 h-full flex-shrink-0 aspect-square">
         <img
           src={product.imageUrl}
           alt={product.name}
@@ -51,7 +54,7 @@ const SpecialItem = ({ product, loading }) => {
             {product.name}
           </h4>
 
-          {/* Price Section with Discount Styling */}
+          {/* Price Section */}
           <div className="text-sm mb-3 font-lato">
             {hasDiscount ? (
               <div className="flex items-center gap-2 flex-wrap">
@@ -81,14 +84,11 @@ const SpecialItem = ({ product, loading }) => {
           </div>
         </div>
 
-        <Link
-          to={`/products/${product.slug}`}
-          className="inline-block font-lato underline text-sm text-center transition-colors text-gray-500 hover:text-gray-700"
-        >
+        <span className="inline-block font-lato underline text-sm text-gray-500 hover:text-gray-600">
           Shop Now
-        </Link>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 };
 

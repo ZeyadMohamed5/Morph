@@ -69,7 +69,7 @@ const Home = () => {
     return (
       <section
         key={sectionId}
-        className="wrapper mt-10"
+        className="wrapper mt-8"
         aria-labelledby={headingId}
       >
         <h2
@@ -115,7 +115,7 @@ const Home = () => {
       </Helmet>
       {/* Hero Banner */}
       <section
-        className="relative w-full min-h-[100dvh] bg-cover bg-center flex flex-col lg:flex-row items-center justify-between gap-8 px-6 pt-35 lg:pt-0"
+        className="relative w-full min-h-[100vh] bg-cover bg-center flex flex-col lg:flex-row items-center justify-between gap-8 px-6 pt-35 lg:pt-0"
         style={{
           backgroundImage: 'url("./assets/-1011.jpg")',
           backgroundAttachment: "fixed",
@@ -175,7 +175,7 @@ const Home = () => {
 
       {/* Global Error Handling for Featured Sections */}
       {(categoriesError || specialError) && (
-        <section className="wrapper py-8">
+        <section className="wrapper">
           <div className="text-center">
             <p className="text-red-600 mb-4">
               Some sections failed to load. Please try refreshing the page.

@@ -21,6 +21,7 @@ const SearchBox = () => {
     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
       <div className="relative">
         <input
+          name="SearchBox"
           type="text"
           placeholder="Search products..."
           value={query}

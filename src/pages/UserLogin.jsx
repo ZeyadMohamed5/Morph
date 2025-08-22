@@ -6,12 +6,14 @@ import { loginAdmin } from "../Api/user";
 const UserLogin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // 🔹 new state
   const { setIsAuthenticated } = useAuth();
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // 🔹 start loading
 
     try {
       await loginAdmin({ username, password });
@@ -19,6 +21,8 @@ const UserLogin = () => {
       navigate("/admin/dashboard");
     } catch (err) {
       alert(err.message);
+    } finally {
+      setLoading(false); // 🔹 stop loading
     }
   };
 
@@ -38,6 +42,7 @@ const UserLogin = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
+            disabled={loading}
           />
         </label>
 
@@ -49,14 +54,20 @@ const UserLogin = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
         </label>
 
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 w-full"
+          disabled={loading}
+          className={`w-full py-2 px-4 rounded text-white ${
+            loading
+              ? "bg-blue-300 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>

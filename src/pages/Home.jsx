@@ -168,7 +168,7 @@ const Home = () => {
         <CategoryGrid categories={categories} loading={categoriesLoading} />
       </section>
 
-      {/* Featured Sections (including New Arrivals) */}
+      {/* Featured Sections  */}
       {validFeaturedSections.map((section) => (
         <FeaturedSection key={section.slug} section={section} />
       ))}
@@ -256,7 +256,7 @@ const Home = () => {
                 </h3>
                 <p className="font-lato text-gray-500 text-sm text-left max-w-md">
                   Get your orders delivered quickly with our reliable shipping
-                  partners across Indonesia.
+                  partners across Egypt.
                 </p>
               </div>
             </div>

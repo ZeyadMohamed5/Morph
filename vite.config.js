@@ -58,8 +58,8 @@ export default defineConfig(async () => {
         priority: {
           "/": 1.0, // homepage
           "/shop": 0.9, // shop page
-          "products/*": 0.8, // all products
-          "category/*": 0.7, // all categories
+          "/products/**": 0.8, 
+          "/shop?category=*": 0.7, // category pages
           "*": 0.6, // default for any other route
         },
       }),

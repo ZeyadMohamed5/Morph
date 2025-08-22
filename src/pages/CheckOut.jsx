@@ -96,26 +96,17 @@ const CheckOut = () => {
     {
       id: "CASH_ON_DELIVERY",
       name: "Cash on Delivery",
-      description: "Pay when your order is delivered to your doorstep",
       available: true,
-      icon: "💵",
-      details: "No additional charges • Secure delivery",
     },
     {
       id: "CREDIT_CARD",
       name: "Credit Card",
-      description: "Pay securely with your credit card",
       available: false,
-      icon: "💳",
-      details: "Visa, MasterCard accepted • SSL secured",
     },
     {
       id: "SmartWallet",
       name: "Smart Wallet",
-      description: "Pay with your Smart Wallet",
       available: false,
-      icon: "💳",
-      details: "Fast and secure SmartWallet checkout",
     },
   ];
 
@@ -184,11 +175,15 @@ const CheckOut = () => {
       <div style={{ height: HEADER_HEIGHT }} />
       <div className="grid grid-cols-12 gap-8 mb-10">
         {/* Left Column: Form */}
-        <h2 className="text-7xl uppercase font-playfair mb-6 col-span-12">
+        <h2 className="text-5xl md:text-7xl uppercase font-playfair mb-6 col-span-12">
           Checkout Form
         </h2>
         <div className="col-span-12 md:col-span-6">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form
+            id="checkout-form"
+            className="space-y-6"
+            onSubmit={handleSubmit}
+          >
             {/* Contact Information Section */}
             <div>
               <h3 className="text-3xl uppercase font-lato mb-4 text-gray-900">
@@ -334,7 +329,6 @@ const CheckOut = () => {
                     />
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="text-2xl">{method.icon}</span>
                         <div>
                           <span className="font-lato font-semibold text-gray-800 text-lg">
                             {method.name}
@@ -346,29 +340,6 @@ const CheckOut = () => {
                           )}
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600 font-lato mb-1">
-                        {method.description}
-                      </p>
-                      <p className="text-xs text-gray-500 font-lato">
-                        {method.details}
-                      </p>
-
-                      {paymentMethod === method.id && method.available && (
-                        <div className="mt-2 flex items-center text-theme-clr">
-                          <svg
-                            className="w-4 h-4 mr-1"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span className="text-xs font-medium">Selected</span>
-                        </div>
-                      )}
                     </div>
                   </label>
                 ))}
@@ -396,7 +367,7 @@ const CheckOut = () => {
               )}
             </div>
 
-            <div className="flex justify-end pt-4">
+            <div className="hidden md:flex justify-end pt-4">
               <button
                 type="submit"
                 disabled={submitting || cartItems.length === 0 || !selectedCity}
@@ -503,6 +474,18 @@ const CheckOut = () => {
             </div>
           )}
         </div>
+
+        {/* Mobile Confirm Button */}
+      </div>
+      <div className="my-4 md:hidden">
+        <button
+          type="submit"
+          form="checkout-form" // important to link to your form
+          disabled={submitting || cartItems.length === 0 || !selectedCity}
+          className="w-full px-8 py-3 bg-theme-clr text-white font-lato uppercase tracking-wide hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed text-lg"
+        >
+          {submitting ? "Placing Order..." : "Confirm Order"}
+        </button>
       </div>
     </section>
   );

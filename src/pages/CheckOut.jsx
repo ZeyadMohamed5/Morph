@@ -175,7 +175,7 @@ const CheckOut = () => {
       <div style={{ height: HEADER_HEIGHT }} />
       <div className="grid grid-cols-12 gap-8 mb-10">
         {/* Left Column: Form */}
-        <h2 className="text-5xl md:text-7xl uppercase font-playfair mb-6 col-span-12">
+        <h2 className="text-4xl md:text-7xl uppercase font-playfair md:mb-6 col-span-12 text-theme-clr">
           Checkout Form
         </h2>
         <div className="col-span-12 md:col-span-6">
@@ -308,7 +308,7 @@ const CheckOut = () => {
                 {paymentMethods.map((method) => (
                   <label
                     key={method.id}
-                    className={`flex flex-col sm:flex-row items-start p-4 border cursor-pointer transition-all duration-200 w-full md:w-[48%] lg:w-[100%] ${
+                    className={`flex items-center p-4 border cursor-pointer transition-all duration-200 w-full md:w-[48%] lg:w-[100%] ${
                       paymentMethod === method.id
                         ? "border-theme-clr bg-gray-50 shadow-md"
                         : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
@@ -328,7 +328,7 @@ const CheckOut = () => {
                       className="mt-1 mr-4 w-4 h-4 text-theme-clr focus:ring-theme-clr"
                     />
                     <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
+                      <div className="flex items-center   ">
                         <div>
                           <span className="font-lato font-semibold text-gray-800 text-lg">
                             {method.name}

@@ -99,7 +99,6 @@ const Cart = () => {
   }, [cart]);
 
   const handleDelete = (id, variantId, size) => {
-
     dispatch({
       type: "REMOVE_FROM_CART",
       payload: { id, variantId, size },
@@ -110,7 +109,6 @@ const Cart = () => {
     if (newQuantity < 1) {
       return;
     }
-
 
     dispatch({
       type: "UPDATE_QUANTITY",
@@ -134,7 +132,6 @@ const Cart = () => {
       : discountedSubtotal;
     const code = couponInfo?.code || null;
 
-   
     navigate("/checkout", {
       state: {
         items: cartItems,
@@ -169,7 +166,9 @@ const Cart = () => {
     <section className="wrapper min-h-screen">
       <div style={{ height: HEADER_HEIGHT }} />
       <div className="grid grid-cols-12 gap-4">
-        <h2 className="text-7xl uppercase col-span-12 font-playfair">Cart</h2>
+        <h2 className="text-7xl uppercase col-span-12 font-playfair text-theme-clr">
+          Cart
+        </h2>
         <div className="col-span-12 md:col-span-7 mb-2 md:mb-13">
           {loading ? (
             <div>

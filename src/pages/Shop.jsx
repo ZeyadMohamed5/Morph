@@ -61,16 +61,16 @@ const Shop = () => {
     const DOMAIN_URL = import.meta.env.VITE_DOMAIN_URL;
     let title = "Morph - Shop";
     let description = "Browse all available products on Morph.";
-    let canonical = `${DOMAIN_URL}/shop`;
+    let canonical = `https://${DOMAIN_URL}/shop`;
 
     if (categoryName) {
       title = `Morph - ${categoryName}`;
       description = `Browse our selection of ${categoryName} products.`;
-      canonical = `${DOMAIN_URL}/shop?category=${categorySlug}`;
+      canonical = `https://${DOMAIN_URL}/shop?category=${categorySlug}`;
     } else if (search) {
       title = `Search results for "${search}" - Morph`;
       description = `Search results for "${search}" on Morph.`;
-      canonical = `${DOMAIN_URL}/shop?q=${encodeURIComponent(search)}`;
+      canonical = `https://${DOMAIN_URL}/shop?q=${encodeURIComponent(search)}`;
     }
 
     return {

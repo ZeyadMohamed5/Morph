@@ -22,5 +22,13 @@
     "limit": 4,
     "linkPath": "/shop?category=statement-layers",
     "linkLabel": "View all statement layers products"
+  },
+  {
+    "type": "category",
+    "slug": "bags",
+    "heading": "Luxury in Every Stitch",
+    "limit": 4,
+    "linkPath": "/shop?category=bags",
+    "linkLabel": "View all bags products"
   }
 ]

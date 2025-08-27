@@ -205,7 +205,7 @@ const Home = () => {
             <h3 className="font-playfair text-3xl md:text-4xl mb-2 text-gray-700">
               100% Satisfaction Guaranteed
             </h3>
-            <p className="font-lato text-gray-500 text-sm text-left max-w-xl mx-auto md:mx-0">
+            <p className="font-lato text-gray-500 text-sm md:text-left max-w-xl mx-auto md:mx-0 text-center">
               We stand behind every product we sell. If you're not completely
               satisfied with your purchase, we'll make it right with our
               hassle-free return policy.
@@ -219,10 +219,10 @@ const Home = () => {
                 <FaPhoneAlt size={24} aria-hidden="true" />
               </div>
               <div>
-                <h3 className="font-playfair text-2xl md:text-3xl text-gray-700 mb-1">
+                <h3 className="font-playfair text-2xl md:text-3xl text-gray-700 mb-1 text-center md:text-left">
                   24/7 Online Service
                 </h3>
-                <p className="font-lato text-gray-500 text-sm text-left max-w-md">
+                <p className="font-lato text-gray-500 text-sm  max-w-md md:text-left text-center">
                   Our customer support team is available around the clock to
                   help you with any questions or concerns.
                 </p>
@@ -235,10 +235,10 @@ const Home = () => {
             <div className="flex justify-center items-center w-16 h-16 rounded-full bg-theme-clr text-white mx-auto mb-4">
               <BsFillCreditCardFill size={24} aria-hidden="true" />
             </div>
-            <h3 className="font-playfair text-3xl md:text-4xl mb-2 text-gray-700">
+            <h3 className="font-playfair text-3xl md:text-4xl mb-2 text-gray-700 ">
               Payment With Secure System
             </h3>
-            <p className="font-lato text-gray-500 text-sm text-left max-w-xl mx-auto md:mx-0">
+            <p className="font-lato text-gray-500 text-sm md:text-left max-w-xl mx-auto md:mx-0 text-center">
               Your payment information is protected with industry-standard
               encryption. Shop with confidence knowing your data is secure.
             </p>
@@ -251,10 +251,10 @@ const Home = () => {
                 <IoIosRocket size={24} aria-hidden="true" />
               </div>
               <div>
-                <h3 className="font-playfair text-2xl md:text-3xl text-gray-700 mb-1">
+                <h3 className="font-playfair text-2xl md:text-3xl text-gray-700 mb-1 text-center md:text-left">
                   Fast Delivery
                 </h3>
-                <p className="font-lato text-gray-500 text-sm text-left max-w-md">
+                <p className="font-lato text-gray-500 text-sm md:text-left max-w-md text-center">
                   Get your orders delivered quickly with our reliable shipping
                   partners across Egypt.
                 </p>

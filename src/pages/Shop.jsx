@@ -248,7 +248,7 @@ const Shop = () => {
             />
           </div>
 
-          <div className="md:col-span-10 col-span-12 min-h-[90vh] flex flex-col">
+          <div className="md:col-span-10 col-span-12 min-h-[90vh] flex flex-col pb-6">
             {/* Loading state with previous data */}
             {isLoading && !isPreviousData && <Spinner />}
 

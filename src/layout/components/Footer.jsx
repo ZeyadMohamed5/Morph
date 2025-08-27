@@ -14,7 +14,7 @@ const Footer = () => {
 
         {/* Quick links */}
         <div className="col-span-4 md:col-span-3">
-          <h3 className="font-semibold text-lg mb-2">Quick Links</h3>
+          <h3 className="font-semibold md:text-lg mb-2">Quick Links</h3>
           <ul className="text-sm font-semibold space-y-1">
             <li>
               <Link className="relative group" to="/">
@@ -39,7 +39,7 @@ const Footer = () => {
 
         {/* Social links */}
         <div className="col-span-4 md:col-span-3">
-          <h3 className="font-semibold text-lg mb-2">Follow Us</h3>
+          <h3 className="font-semibold md:text-lg mb-2">Follow Us</h3>
           <ul className="text-sm font-semibold space-y-1">
             <li>
               <a
@@ -73,10 +73,10 @@ const Footer = () => {
 
         {/* Policies */}
         <div className="col-span-4 md:col-span-3">
-          <h3 className="font-semibold text-lg mb-2">Policies</h3>
+          <h3 className="font-semibold md:text-lg mb-2">Policies</h3>
           <ul className="text-sm font-semibold space-y-1">
             <li>
-              <Link className="relative group" to="/terms">
+              <Link className="relative group " to="/terms">
                 Terms & Conditions
                 <span className="absolute left-0 bottom-0 w-0 h-[2px] transition-all duration-500 group-hover:w-full bg-white"></span>
               </Link>

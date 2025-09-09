@@ -45,7 +45,6 @@ async function getDynamicRoutes() {
 
 export default defineConfig(async () => {
   const dynamicRoutes = await getDynamicRoutes();
-
   const allRoutes = ["/shop", ...dynamicRoutes];
 
   return {
@@ -56,13 +55,21 @@ export default defineConfig(async () => {
         hostname: "https://www.morpheg.store",
         dynamicRoutes: allRoutes,
         priority: {
-          "/": 1.0, // homepage
-          "/shop": 0.9, // shop page
+          "/": 1.0,
+          "/shop": 0.9,
           "/products/**": 0.8,
-          "/shop?category=*": 0.7, // category pages
-          "*": 0.6, // default for any other route
+          "/shop?category=*": 0.7,
+          "*": 0.6,
         },
         exclude: ["/admin", "/login"],
+        // Add this to fix the robots.txt error
+        robots: [
+          {
+            userAgent: "*",
+            allow: "/",
+            sitemap: "https://www.morpheg.store/sitemap.xml",
+          },
+        ],
       }),
     ],
     server: {

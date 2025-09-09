@@ -11,6 +11,12 @@ const SearchBox = () => {
     const trimmed = query.trim();
 
     if (trimmed) {
+      if (typeof fbq === "function") {
+        fbq("track", "Search", {
+          search_string: trimmed,
+        });
+      }
+
       navigate(`/shop?q=${encodeURIComponent(trimmed)}`);
     } else {
       navigate("/shop");

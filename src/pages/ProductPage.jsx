@@ -43,6 +43,16 @@ const ProductPage = () => {
         // Reset selections when product changes
         setSelectedVariantId(null);
         setSelectedSizeId(null);
+
+        // ✅ Fire Meta Pixel ViewContent event
+        if (window.fbq) {
+          window.fbq("track", "ViewContent", {
+            content_ids: [data.id],
+            content_name: data.name,
+            value: data.discount?.discountedPrice || data.price,
+            currency: "EGP",
+          });
+        }
       } catch (err) {
         console.error("Fetch error:", err);
         setError("Failed to load product");
@@ -68,6 +78,18 @@ const ProductPage = () => {
         quantity,
       },
     });
+
+    if (window.fbq) {
+      window.fbq("track", "AddToCart", {
+        content_ids: [product.id],
+        content_name: product.name,
+        value: (product.discount?.discountedPrice || product.price) * quantity,
+        currency: "EGP",
+        quantity,
+        variant: selectedVariantId,
+        size: selectedSizeId,
+      });
+    }
     setNotification(true);
     setTimeout(() => {
       setNotification(false);

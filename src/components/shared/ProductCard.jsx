@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const ProductCard = ({ product, loading = false }) => {
+const ProductCard = ({ product, loading = false, className = "" }) => {
   if (loading) {
     return (
-      <div className="col-span-6 md:col-span-6 lg:col-span-3">
+      <div className={className}>
         <div className="flex flex-col h-full relative group">
           <div className="w-full aspect-[4/5] overflow-hidden relative">
             <Skeleton
@@ -24,11 +24,10 @@ const ProductCard = ({ product, loading = false }) => {
   }
 
   const { name, price, imageUrl, discount, previousPrice, slug } = product;
-
   const hasDiscount = discount && discount.discountedPrice;
 
   return (
-    <div className="col-span-6 md:col-span-6 lg:col-span-3">
+    <div className={className}>
       <Link to={`/products/${slug}`}>
         <div className="flex flex-col h-full relative group">
           <div className="w-full aspect-[4/5] overflow-hidden relative">
@@ -44,9 +43,7 @@ const ProductCard = ({ product, loading = false }) => {
               </div>
             )}
           </div>
-
           <div className="mt-3 flex flex-col justify-between flex-grow">
-            <span className="text-xs font-semibold font-lato uppercase text-gray-600"></span>
             <h4 className="mt-1 font-playfair text-2xl capitalize text-gray-700">
               {name}
             </h4>

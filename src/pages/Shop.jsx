@@ -278,8 +278,13 @@ const Shop = () => {
                   }`}
                 >
                   <RenderList
+                    ItemComponent={(props) => (
+                      <ProductCard
+                        {...props}
+                        className="col-span-6 md:col-span-6 lg:col-span-3"
+                      />
+                    )}
                     data={products}
-                    ItemComponent={ProductCard}
                     limit={products.length}
                     loading={isLoading && !isPreviousData}
                   />

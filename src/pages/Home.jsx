@@ -10,6 +10,7 @@ import CategoryGrid from "../components/CategoryGrid";
 import SpecialItem from "../components/shared/SpecialItem";
 import { useCategories, useSpecialProducts } from "../hooks/useProducts";
 import { Helmet } from "react-helmet-async";
+import Carousel from "../components/Carousel";
 
 const Home = () => {
   const featuredSections = useMemo(() => featuredSectionsData, []);
@@ -79,16 +80,23 @@ const Home = () => {
           {section.heading}
         </h2>
 
-        <div className="grid grid-cols-12 gap-2">
-          <RenderList
-            ItemComponent={ProductCard}
-            limit={section.limit}
-            categoryFilter={
-              section.type === "category" ? section.slug : undefined
-            }
-            tagFilter={section.type === "tag" ? section.tag : undefined}
-            loading={categoriesLoading}
-          />
+        <div className="my-6">
+          <Carousel>
+            <RenderList
+              ItemComponent={(props) => (
+                <ProductCard
+                  {...props}
+                  className="flex-shrink-0 w-[80%] sm:w-[48%] md:w-[32%] lg:w-[24%]"
+                />
+              )}
+              limit={section.limit}
+              categoryFilter={
+                section.type === "category" ? section.slug : undefined
+              }
+              tagFilter={section.type === "tag" ? section.tag : undefined}
+              loading={categoriesLoading}
+            />
+          </Carousel>
         </div>
 
         <Link

@@ -3,7 +3,7 @@
     "type": "category",
     "slug": "new-arrivals",
     "heading": "New Arrivals",
-    "limit": 4,
+    "limit": 8,
     "linkPath": "/shop?category=new-arrivals",
     "linkLabel": "View all easy wear products"
   },
@@ -11,7 +11,7 @@
     "type": "category",
     "slug": "easy-wear",
     "heading": "Effortless Everyday Style",
-    "limit": 4,
+    "limit": 8,
     "linkPath": "/shop?category=easy-wear",
     "linkLabel": "View all easy wear products"
   },
@@ -19,7 +19,7 @@
     "type": "category",
     "slug": "statement-layers",
     "heading": "Handmade Layers That Speak",
-    "limit": 4,
+    "limit": 8,
     "linkPath": "/shop?category=statement-layers",
     "linkLabel": "View all statement layers products"
   },
@@ -27,7 +27,7 @@
     "type": "category",
     "slug": "bags",
     "heading": "Luxury in Every Stitch",
-    "limit": 4,
+    "limit": 8,
     "linkPath": "/shop?category=bags",
     "linkLabel": "View all bags products"
   }
